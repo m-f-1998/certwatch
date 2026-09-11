@@ -1,0 +1,99 @@
+name: CertWatch
+options:
+  bundleIdPrefix: com.mfrankland
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    MARKETING_VERSION: "1.0.1"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: 5LVS6ZWDJW
+
+configs:
+  Debug: debug
+  Release: release
+
+targets:
+  CertWatch:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+        excludes:
+          - Info.plist
+      - path: Shared
+    info:
+      path: App/Info.plist
+      properties:
+        BGTaskSchedulerPermittedIdentifiers:
+          - com.mfrankland.certwatch.refresh
+        UIBackgroundModes:
+          - fetch
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+          UIImageName: LaunchImage
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.mfrankland.certwatch
+      INFOPLIST_KEY_CFBundleDisplayName: CertWatch
+      INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.developer-tools
+      INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+      INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+      INFOPLIST_KEY_NSLocalNetworkUsageDescription: CertWatch connects to hostnames you enter to read TLS certificate expiry information.
+      GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_ENTITLEMENTS: CertWatch.entitlements
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    entitlements:
+      path: CertWatch.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.matthewfrankland.certwatch
+    dependencies:
+      - target: CertWatchWidgetExtension
+        embed: true
+    scheme:
+      testTargets:
+        - CertWatchTests
+      storeKitConfiguration: Configuration/CertWatch.storekit
+
+  CertWatchWidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Widget
+        excludes:
+          - Info.plist
+      - path: Shared
+        excludes:
+          - "**/Services/BackgroundRefreshService.swift"
+          - "**/Services/StoreKitManager.swift"
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: CertWatch Widget
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.mfrankland.certwatch.widget
+      GENERATE_INFOPLIST_FILE: YES
+      CODE_SIGN_ENTITLEMENTS: Widget.entitlements
+    entitlements:
+      path: Widget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.matthewfrankland.certwatch
+
+  CertWatchTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: CertWatchTests
+    dependencies:
+      - target: CertWatch
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.mfrankland.certwatch.tests
+      GENERATE_INFOPLIST_FILE: YES

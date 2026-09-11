@@ -1,0 +1,834 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		067FB3769902F3B017C47361 /* CertificatePEMParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC637E6A3BF56B571644E7 /* CertificatePEMParser.swift */; };
+		072B4484B07B384AB282DD16 /* MonitoredEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9FF8A3D548DEBBFA415A93 /* MonitoredEndpointTests.swift */; };
+		0C20CDF8E613363CA22375E1 /* CertificateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED58BD2D0321818E25DCE36F /* CertificateInfo.swift */; };
+		0CABDEA5134676719958982B /* GlassCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B7C9482D67DBF7412A18C2 /* GlassCard.swift */; };
+		0E336D561C0904FFF8F31049 /* BackgroundRefreshService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9010711FFBCE43E48BAA8A /* BackgroundRefreshService.swift */; };
+		1109F9180D0A230E08F96BBF /* WidgetViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 355DCD075935D7CDD4902B56 /* WidgetViews.swift */; };
+		133AE18E1B9F9295191E2714 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F98FB12A1FBC5D87C69CCB /* StoreKitManager.swift */; };
+		1566683C64C0E6C8A786AD88 /* MonitoredEndpoint+Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D68D81C5E265FFA3C9C0E8 /* MonitoredEndpoint+Display.swift */; };
+		21625DFCCFF07A4F2F30F0F7 /* CertificateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED58BD2D0321818E25DCE36F /* CertificateInfo.swift */; };
+		22462175A4C9A71326490333 /* ExportImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC435691A4E042B1E2AC167E /* ExportImportService.swift */; };
+		2459414EB855643D92EB2640 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CE9CC235ADAAF557FADB0C /* RootView.swift */; };
+		251ECA68057C1242A2419EFA /* ExpiryBadgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2416DAD76C15C9FF04688AAC /* ExpiryBadgeTests.swift */; };
+		26FB4721C689A5500F219213 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD861D4CB5CB46D134EE57DD /* Assets.xcassets */; };
+		2FA2BAD1961D0355F602E2B3 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7518A7B8AD9E327BA17019D /* AppSettings.swift */; };
+		34C2F978AB680209114E1663 /* CertWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C952A88D0CADA05D3311B05C /* CertWatchApp.swift */; };
+		3B58BDC35DBA2A757AB64693 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BB13D56DF53CC078C2FDF8 /* NotificationScheduler.swift */; };
+		470D8EC3C321A489CCC85EF5 /* MonitoredEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB7AD00C0CFC4F518CBA53C /* MonitoredEndpoint.swift */; };
+		49B4F390885A84C1370F9F2F /* HostnameParserExtendedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7D54314B10A372FF933FCD /* HostnameParserExtendedTests.swift */; };
+		4CE6CC4C61E54725B0F6FAF0 /* EndpointDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DF5A3F60386C7D1EA3B596 /* EndpointDetailView.swift */; };
+		50AACCB98276D9419109E50E /* CertificateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F429646CF1160D4C3DB0F9F /* CertificateParser.swift */; };
+		513FC1A7D7ED5F3A9DCE12B5 /* DateFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF92633168C1AEAAD12B791F /* DateFormatting.swift */; };
+		5854434EF07DBEDD89674FEC /* ModelContainerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F0D7078DA035245A69BDCC /* ModelContainerFactory.swift */; };
+		58F3A2856DDAB97181FF5EB4 /* DateFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C59A37A5E71652E2D6FB4D2 /* DateFormattingTests.swift */; };
+		60BDE86B518E39EA6112BAA2 /* HostnameParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B91C17789C7927D3FACC1F /* HostnameParser.swift */; };
+		695A082E6988167D0D3799E6 /* CertWatchWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0D27E5C9AA656BB62DD0AC90 /* CertWatchWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		736B3A7714A7AC88FF62A5C2 /* AppMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3F5038285B1758B80C8B89 /* AppMetadata.swift */; };
+		7486DD819FC446ADD843051F /* CertWatchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7891E5A97D1B996EFFB208A4 /* CertWatchTheme.swift */; };
+		76E794782D619E0390A92C37 /* CertificatePEMParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79C9F973EF67A7821E13A72 /* CertificatePEMParserTests.swift */; };
+		7867D0A0086CB4C1FAA9D6A1 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BB13D56DF53CC078C2FDF8 /* NotificationScheduler.swift */; };
+		78B060252052EA463E695CDC /* EndpointStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5941930D1430E64DA0DF983D /* EndpointStore.swift */; };
+		7C30E603AED906ABA7127EA9 /* AppMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3F5038285B1758B80C8B89 /* AppMetadata.swift */; };
+		7E4662CC1F65DD9BDA85CF77 /* WidgetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F7FB5E12CBDFC85AB6BE24 /* WidgetProvider.swift */; };
+		7ED9C9C4B6360FD381A55F75 /* CertificatePEMParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC637E6A3BF56B571644E7 /* CertificatePEMParser.swift */; };
+		845010E06921EB1F5001287E /* AppSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297EACFCBEC2C6CDEE93F34C /* AppSettingsTests.swift */; };
+		890AF3CA33907861D9189970 /* ExpiryBadgeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48651E9706991286696F48 /* ExpiryBadgeStyle.swift */; };
+		8FFBDF472FD7E927A47F7F15 /* DateFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF92633168C1AEAAD12B791F /* DateFormatting.swift */; };
+		9104F278BC25ABA3C94D8124 /* ModelContainerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F0D7078DA035245A69BDCC /* ModelContainerFactory.swift */; };
+		921FD6B8EC5E6FC4DC58B76E /* CertWatchWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDA5A3B5A1207A005DBACE0 /* CertWatchWidgetBundle.swift */; };
+		9691C7394B74D68F27236563 /* CertWatchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7891E5A97D1B996EFFB208A4 /* CertWatchTheme.swift */; };
+		97DE3DB389D80168232271CA /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D96D31F20F1FFFBB3AACAB /* DashboardView.swift */; };
+		9DF636A090BB6077126D5072 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7518A7B8AD9E327BA17019D /* AppSettings.swift */; };
+		A4C2695E9983DA5BF14A3B71 /* CertWatchWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319133937B53ED06A7CAD9F1 /* CertWatchWidget.swift */; };
+		A4DBAF33E26228A74073AC03 /* ExportImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209BB968D5E99C771BCF41A1 /* ExportImportTests.swift */; };
+		A5554E324783307C10ABA084 /* NotificationSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC0850CA5F37EA571B2BB58 /* NotificationSchedulerTests.swift */; };
+		A656B0B6FE8E8C4368C5CD28 /* ExpiryBadgeExtendedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE2E116D4F4B406D113DD44 /* ExpiryBadgeExtendedTests.swift */; };
+		AC46DC84CEC9B8E5852655A4 /* HostnameParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B91C17789C7927D3FACC1F /* HostnameParser.swift */; };
+		AF362F94C6565AA48AF083D4 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE055740C6FD2A74D7C45F6 /* FlowLayout.swift */; };
+		AF59FF98F08960226A1AE931 /* CertificateServiceErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B13EB42156BD8EEB889A551 /* CertificateServiceErrorTests.swift */; };
+		B292FE1B7A8A00843E42578F /* X509DERParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBAEBD76C5AF76969A949DF /* X509DERParser.swift */; };
+		B38DA8BFD1878608B5A98A48 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E96D2DCF67F91CF39597E2 /* SettingsView.swift */; };
+		B39A17858DDDCFF5697D0552 /* ExportImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC435691A4E042B1E2AC167E /* ExportImportService.swift */; };
+		B56228EC3D76A6F71CEA3058 /* GlassCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B7C9482D67DBF7412A18C2 /* GlassCard.swift */; };
+		B611891596937A2E7FB9959A /* CertificateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F429646CF1160D4C3DB0F9F /* CertificateParser.swift */; };
+		C3B1DF81B34B7F3A5CE50523 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61426E883EAAFF81D04923B5 /* OnboardingView.swift */; };
+		C79BFA08F505E1AB8CB27E56 /* AddEndpointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B585FBA2C4E3D69A505CB /* AddEndpointView.swift */; };
+		C97BF74D7C3C1B9FBBE549A9 /* CertificateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D02CCF54467178AF246BA1 /* CertificateService.swift */; };
+		CC936CD20CA4669E2F0A8FC6 /* HostnameParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F1F8A74060E105CE3C5913 /* HostnameParserTests.swift */; };
+		D68076486587CA60227B5952 /* CertificateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D02CCF54467178AF246BA1 /* CertificateService.swift */; };
+		DC450D8F7910CC9D3F6A1D07 /* EndpointStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5941930D1430E64DA0DF983D /* EndpointStore.swift */; };
+		E08926DD9E481961944E06DC /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD1C85E628E452727649330 /* PaywallView.swift */; };
+		E197A61D4B21EC46E8379F46 /* X509DERParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBAEBD76C5AF76969A949DF /* X509DERParser.swift */; };
+		E9DFD075C8932520DB0F946F /* ExpiryBadgeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48651E9706991286696F48 /* ExpiryBadgeStyle.swift */; };
+		F058B23097C58A46B847CB70 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE055740C6FD2A74D7C45F6 /* FlowLayout.swift */; };
+		FABAD6B2FF86B488AE2D1AE2 /* MonitoredEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB7AD00C0CFC4F518CBA53C /* MonitoredEndpoint.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		74DB79A6FFF1B58CCA64FC24 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A8E8F5948F216C5FF3434B78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2C792231599FE2354DDD7DFA;
+			remoteInfo = CertWatch;
+		};
+		A2B20F799D1D93FEAEC07A88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A8E8F5948F216C5FF3434B78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EE7763E96B802474B812849B;
+			remoteInfo = CertWatchWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0EA60CE1D54AFA72D3B092F6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				695A082E6988167D0D3799E6 /* CertWatchWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		01D96D31F20F1FFFBB3AACAB /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		07D02CCF54467178AF246BA1 /* CertificateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateService.swift; sourceTree = "<group>"; };
+		0D27E5C9AA656BB62DD0AC90 /* CertWatchWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = CertWatchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0EE055740C6FD2A74D7C45F6 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
+		0F9FF8A3D548DEBBFA415A93 /* MonitoredEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoredEndpointTests.swift; sourceTree = "<group>"; };
+		148BF2CC2A2EB195F0EAA951 /* CertWatchTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = CertWatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		19CE9CC235ADAAF557FADB0C /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		1E3F5038285B1758B80C8B89 /* AppMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMetadata.swift; sourceTree = "<group>"; };
+		209BB968D5E99C771BCF41A1 /* ExportImportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportImportTests.swift; sourceTree = "<group>"; };
+		2416DAD76C15C9FF04688AAC /* ExpiryBadgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiryBadgeTests.swift; sourceTree = "<group>"; };
+		297EACFCBEC2C6CDEE93F34C /* AppSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsTests.swift; sourceTree = "<group>"; };
+		319133937B53ED06A7CAD9F1 /* CertWatchWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertWatchWidget.swift; sourceTree = "<group>"; };
+		33E96D2DCF67F91CF39597E2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		34B91C17789C7927D3FACC1F /* HostnameParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostnameParser.swift; sourceTree = "<group>"; };
+		355DCD075935D7CDD4902B56 /* WidgetViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetViews.swift; sourceTree = "<group>"; };
+		3AB7AD00C0CFC4F518CBA53C /* MonitoredEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoredEndpoint.swift; sourceTree = "<group>"; };
+		4FDA5A3B5A1207A005DBACE0 /* CertWatchWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertWatchWidgetBundle.swift; sourceTree = "<group>"; };
+		5941930D1430E64DA0DF983D /* EndpointStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointStore.swift; sourceTree = "<group>"; };
+		5C48651E9706991286696F48 /* ExpiryBadgeStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiryBadgeStyle.swift; sourceTree = "<group>"; };
+		61426E883EAAFF81D04923B5 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		6B13EB42156BD8EEB889A551 /* CertificateServiceErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateServiceErrorTests.swift; sourceTree = "<group>"; };
+		7891E5A97D1B996EFFB208A4 /* CertWatchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertWatchTheme.swift; sourceTree = "<group>"; };
+		78BB13D56DF53CC078C2FDF8 /* NotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
+		7C59A37A5E71652E2D6FB4D2 /* DateFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormattingTests.swift; sourceTree = "<group>"; };
+		9BBC637E6A3BF56B571644E7 /* CertificatePEMParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePEMParser.swift; sourceTree = "<group>"; };
+		9F429646CF1160D4C3DB0F9F /* CertificateParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateParser.swift; sourceTree = "<group>"; };
+		A5F1F8A74060E105CE3C5913 /* HostnameParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostnameParserTests.swift; sourceTree = "<group>"; };
+		A79C9F973EF67A7821E13A72 /* CertificatePEMParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePEMParserTests.swift; sourceTree = "<group>"; };
+		A8B7C9482D67DBF7412A18C2 /* GlassCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassCard.swift; sourceTree = "<group>"; };
+		A8F98FB12A1FBC5D87C69CCB /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
+		AF92633168C1AEAAD12B791F /* DateFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatting.swift; sourceTree = "<group>"; };
+		B2F7FB5E12CBDFC85AB6BE24 /* WidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetProvider.swift; sourceTree = "<group>"; };
+		BCD1C85E628E452727649330 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		C2D68D81C5E265FFA3C9C0E8 /* MonitoredEndpoint+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MonitoredEndpoint+Display.swift"; sourceTree = "<group>"; };
+		C952A88D0CADA05D3311B05C /* CertWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertWatchApp.swift; sourceTree = "<group>"; };
+		C9F0D7078DA035245A69BDCC /* ModelContainerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerFactory.swift; sourceTree = "<group>"; };
+		D4DF5A3F60386C7D1EA3B596 /* EndpointDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointDetailView.swift; sourceTree = "<group>"; };
+		D7518A7B8AD9E327BA17019D /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		DEBAEBD76C5AF76969A949DF /* X509DERParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X509DERParser.swift; sourceTree = "<group>"; };
+		DEC0850CA5F37EA571B2BB58 /* NotificationSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSchedulerTests.swift; sourceTree = "<group>"; };
+		DF7D54314B10A372FF933FCD /* HostnameParserExtendedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostnameParserExtendedTests.swift; sourceTree = "<group>"; };
+		E0811324527881DB31C8662E /* CertWatch.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CertWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E23B585FBA2C4E3D69A505CB /* AddEndpointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEndpointView.swift; sourceTree = "<group>"; };
+		EC435691A4E042B1E2AC167E /* ExportImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportImportService.swift; sourceTree = "<group>"; };
+		ED58BD2D0321818E25DCE36F /* CertificateInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateInfo.swift; sourceTree = "<group>"; };
+		FD861D4CB5CB46D134EE57DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FE9010711FFBCE43E48BAA8A /* BackgroundRefreshService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundRefreshService.swift; sourceTree = "<group>"; };
+		FFE2E116D4F4B406D113DD44 /* ExpiryBadgeExtendedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiryBadgeExtendedTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1543C05081EF5E8C31BA7C4C /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				01D96D31F20F1FFFBB3AACAB /* DashboardView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		180173FA9CEB23F660D7C6B7 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				61426E883EAAFF81D04923B5 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		364B71176A803EB0EA9E9834 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E0811324527881DB31C8662E /* CertWatch.app */,
+				148BF2CC2A2EB195F0EAA951 /* CertWatchTests.xctest */,
+				0D27E5C9AA656BB62DD0AC90 /* CertWatchWidgetExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		37B5ECD62F4B73CEC2DEE617 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				9BBC637E6A3BF56B571644E7 /* CertificatePEMParser.swift */,
+				AF92633168C1AEAAD12B791F /* DateFormatting.swift */,
+				5C48651E9706991286696F48 /* ExpiryBadgeStyle.swift */,
+				34B91C17789C7927D3FACC1F /* HostnameParser.swift */,
+				DEBAEBD76C5AF76969A949DF /* X509DERParser.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		58FFDE912FA92BFBE31E7061 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				D4DF5A3F60386C7D1EA3B596 /* EndpointDetailView.swift */,
+				C2D68D81C5E265FFA3C9C0E8 /* MonitoredEndpoint+Display.swift */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		5F846B2B085B837857B64041 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				63AE541D452555D8B7014E1A /* Features */,
+				DBAEDF7F84FAAA880B333F44 /* Resources */,
+				C952A88D0CADA05D3311B05C /* CertWatchApp.swift */,
+				19CE9CC235ADAAF557FADB0C /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		63AE541D452555D8B7014E1A /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				F21DAC3D4BF34EFAC3412DFB /* AddEndpoint */,
+				1543C05081EF5E8C31BA7C4C /* Dashboard */,
+				58FFDE912FA92BFBE31E7061 /* Detail */,
+				180173FA9CEB23F660D7C6B7 /* Onboarding */,
+				AB5CAA33CCDD9ED487114453 /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		6B83B33CB792A4C0B6E2EF41 = {
+			isa = PBXGroup;
+			children = (
+				5F846B2B085B837857B64041 /* App */,
+				BBB0FA7683D833F47692F2C1 /* CertWatchTests */,
+				6FD8C8ECAB4E57323805E91C /* Shared */,
+				E0007FCFA27216013E01A87D /* Widget */,
+				364B71176A803EB0EA9E9834 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6FD8C8ECAB4E57323805E91C /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				E3F9271CB14C1C6B14FE6DD7 /* Design */,
+				8A9A181CE4AB513EEFE788CD /* Models */,
+				F4C372414DA05E7BF88BA11F /* Services */,
+				37B5ECD62F4B73CEC2DEE617 /* Utilities */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		8A9A181CE4AB513EEFE788CD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				ED58BD2D0321818E25DCE36F /* CertificateInfo.swift */,
+				3AB7AD00C0CFC4F518CBA53C /* MonitoredEndpoint.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AB5CAA33CCDD9ED487114453 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				BCD1C85E628E452727649330 /* PaywallView.swift */,
+				33E96D2DCF67F91CF39597E2 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		BBB0FA7683D833F47692F2C1 /* CertWatchTests */ = {
+			isa = PBXGroup;
+			children = (
+				297EACFCBEC2C6CDEE93F34C /* AppSettingsTests.swift */,
+				A79C9F973EF67A7821E13A72 /* CertificatePEMParserTests.swift */,
+				6B13EB42156BD8EEB889A551 /* CertificateServiceErrorTests.swift */,
+				7C59A37A5E71652E2D6FB4D2 /* DateFormattingTests.swift */,
+				FFE2E116D4F4B406D113DD44 /* ExpiryBadgeExtendedTests.swift */,
+				2416DAD76C15C9FF04688AAC /* ExpiryBadgeTests.swift */,
+				209BB968D5E99C771BCF41A1 /* ExportImportTests.swift */,
+				DF7D54314B10A372FF933FCD /* HostnameParserExtendedTests.swift */,
+				A5F1F8A74060E105CE3C5913 /* HostnameParserTests.swift */,
+				0F9FF8A3D548DEBBFA415A93 /* MonitoredEndpointTests.swift */,
+				DEC0850CA5F37EA571B2BB58 /* NotificationSchedulerTests.swift */,
+			);
+			path = CertWatchTests;
+			sourceTree = "<group>";
+		};
+		DBAEDF7F84FAAA880B333F44 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FD861D4CB5CB46D134EE57DD /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E0007FCFA27216013E01A87D /* Widget */ = {
+			isa = PBXGroup;
+			children = (
+				319133937B53ED06A7CAD9F1 /* CertWatchWidget.swift */,
+				4FDA5A3B5A1207A005DBACE0 /* CertWatchWidgetBundle.swift */,
+				B2F7FB5E12CBDFC85AB6BE24 /* WidgetProvider.swift */,
+				355DCD075935D7CDD4902B56 /* WidgetViews.swift */,
+			);
+			path = Widget;
+			sourceTree = "<group>";
+		};
+		E3F9271CB14C1C6B14FE6DD7 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				7891E5A97D1B996EFFB208A4 /* CertWatchTheme.swift */,
+				0EE055740C6FD2A74D7C45F6 /* FlowLayout.swift */,
+				A8B7C9482D67DBF7412A18C2 /* GlassCard.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		F21DAC3D4BF34EFAC3412DFB /* AddEndpoint */ = {
+			isa = PBXGroup;
+			children = (
+				E23B585FBA2C4E3D69A505CB /* AddEndpointView.swift */,
+			);
+			path = AddEndpoint;
+			sourceTree = "<group>";
+		};
+		F4C372414DA05E7BF88BA11F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1E3F5038285B1758B80C8B89 /* AppMetadata.swift */,
+				D7518A7B8AD9E327BA17019D /* AppSettings.swift */,
+				FE9010711FFBCE43E48BAA8A /* BackgroundRefreshService.swift */,
+				9F429646CF1160D4C3DB0F9F /* CertificateParser.swift */,
+				07D02CCF54467178AF246BA1 /* CertificateService.swift */,
+				5941930D1430E64DA0DF983D /* EndpointStore.swift */,
+				EC435691A4E042B1E2AC167E /* ExportImportService.swift */,
+				C9F0D7078DA035245A69BDCC /* ModelContainerFactory.swift */,
+				78BB13D56DF53CC078C2FDF8 /* NotificationScheduler.swift */,
+				A8F98FB12A1FBC5D87C69CCB /* StoreKitManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0541F2088BC40ECDEE0A9CC6 /* CertWatchTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C9893294BE4011B9D639A59 /* Build configuration list for PBXNativeTarget "CertWatchTests" */;
+			buildPhases = (
+				E1F21EEA76F3907E52DFD30D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9D5C43574C98A717E5ACBC2B /* PBXTargetDependency */,
+			);
+			name = CertWatchTests;
+			packageProductDependencies = (
+			);
+			productName = CertWatchTests;
+			productReference = 148BF2CC2A2EB195F0EAA951 /* CertWatchTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2C792231599FE2354DDD7DFA /* CertWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C5583BF3B0C32110573ADB99 /* Build configuration list for PBXNativeTarget "CertWatch" */;
+			buildPhases = (
+				21F63ACF56BD881530441696 /* Sources */,
+				3D046F465F8195E3459B1419 /* Resources */,
+				0EA60CE1D54AFA72D3B092F6 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				502E4A10C2C7AE230E24B92E /* PBXTargetDependency */,
+			);
+			name = CertWatch;
+			packageProductDependencies = (
+			);
+			productName = CertWatch;
+			productReference = E0811324527881DB31C8662E /* CertWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EE7763E96B802474B812849B /* CertWatchWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 94CBC481F394D861C677ADC0 /* Build configuration list for PBXNativeTarget "CertWatchWidgetExtension" */;
+			buildPhases = (
+				E4F1D9B8484813D69C699129 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CertWatchWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = CertWatchWidgetExtension;
+			productReference = 0D27E5C9AA656BB62DD0AC90 /* CertWatchWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A8E8F5948F216C5FF3434B78 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					0541F2088BC40ECDEE0A9CC6 = {
+						DevelopmentTeam = 5LVS6ZWDJW;
+					};
+					2C792231599FE2354DDD7DFA = {
+						DevelopmentTeam = 5LVS6ZWDJW;
+					};
+					EE7763E96B802474B812849B = {
+						DevelopmentTeam = 5LVS6ZWDJW;
+					};
+				};
+			};
+			buildConfigurationList = 59A9DAD333F5EAB4ED0C74E8 /* Build configuration list for PBXProject "CertWatch" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 6B83B33CB792A4C0B6E2EF41;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 364B71176A803EB0EA9E9834 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2C792231599FE2354DDD7DFA /* CertWatch */,
+				EE7763E96B802474B812849B /* CertWatchWidgetExtension */,
+				0541F2088BC40ECDEE0A9CC6 /* CertWatchTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3D046F465F8195E3459B1419 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26FB4721C689A5500F219213 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		21F63ACF56BD881530441696 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C79BFA08F505E1AB8CB27E56 /* AddEndpointView.swift in Sources */,
+				736B3A7714A7AC88FF62A5C2 /* AppMetadata.swift in Sources */,
+				2FA2BAD1961D0355F602E2B3 /* AppSettings.swift in Sources */,
+				0E336D561C0904FFF8F31049 /* BackgroundRefreshService.swift in Sources */,
+				34C2F978AB680209114E1663 /* CertWatchApp.swift in Sources */,
+				9691C7394B74D68F27236563 /* CertWatchTheme.swift in Sources */,
+				0C20CDF8E613363CA22375E1 /* CertificateInfo.swift in Sources */,
+				067FB3769902F3B017C47361 /* CertificatePEMParser.swift in Sources */,
+				B611891596937A2E7FB9959A /* CertificateParser.swift in Sources */,
+				D68076486587CA60227B5952 /* CertificateService.swift in Sources */,
+				97DE3DB389D80168232271CA /* DashboardView.swift in Sources */,
+				513FC1A7D7ED5F3A9DCE12B5 /* DateFormatting.swift in Sources */,
+				4CE6CC4C61E54725B0F6FAF0 /* EndpointDetailView.swift in Sources */,
+				DC450D8F7910CC9D3F6A1D07 /* EndpointStore.swift in Sources */,
+				890AF3CA33907861D9189970 /* ExpiryBadgeStyle.swift in Sources */,
+				22462175A4C9A71326490333 /* ExportImportService.swift in Sources */,
+				F058B23097C58A46B847CB70 /* FlowLayout.swift in Sources */,
+				B56228EC3D76A6F71CEA3058 /* GlassCard.swift in Sources */,
+				AC46DC84CEC9B8E5852655A4 /* HostnameParser.swift in Sources */,
+				5854434EF07DBEDD89674FEC /* ModelContainerFactory.swift in Sources */,
+				1566683C64C0E6C8A786AD88 /* MonitoredEndpoint+Display.swift in Sources */,
+				470D8EC3C321A489CCC85EF5 /* MonitoredEndpoint.swift in Sources */,
+				3B58BDC35DBA2A757AB64693 /* NotificationScheduler.swift in Sources */,
+				C3B1DF81B34B7F3A5CE50523 /* OnboardingView.swift in Sources */,
+				E08926DD9E481961944E06DC /* PaywallView.swift in Sources */,
+				2459414EB855643D92EB2640 /* RootView.swift in Sources */,
+				B38DA8BFD1878608B5A98A48 /* SettingsView.swift in Sources */,
+				133AE18E1B9F9295191E2714 /* StoreKitManager.swift in Sources */,
+				B292FE1B7A8A00843E42578F /* X509DERParser.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E1F21EEA76F3907E52DFD30D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				845010E06921EB1F5001287E /* AppSettingsTests.swift in Sources */,
+				76E794782D619E0390A92C37 /* CertificatePEMParserTests.swift in Sources */,
+				AF59FF98F08960226A1AE931 /* CertificateServiceErrorTests.swift in Sources */,
+				58F3A2856DDAB97181FF5EB4 /* DateFormattingTests.swift in Sources */,
+				A656B0B6FE8E8C4368C5CD28 /* ExpiryBadgeExtendedTests.swift in Sources */,
+				251ECA68057C1242A2419EFA /* ExpiryBadgeTests.swift in Sources */,
+				A4DBAF33E26228A74073AC03 /* ExportImportTests.swift in Sources */,
+				49B4F390885A84C1370F9F2F /* HostnameParserExtendedTests.swift in Sources */,
+				CC936CD20CA4669E2F0A8FC6 /* HostnameParserTests.swift in Sources */,
+				072B4484B07B384AB282DD16 /* MonitoredEndpointTests.swift in Sources */,
+				A5554E324783307C10ABA084 /* NotificationSchedulerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4F1D9B8484813D69C699129 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C30E603AED906ABA7127EA9 /* AppMetadata.swift in Sources */,
+				9DF636A090BB6077126D5072 /* AppSettings.swift in Sources */,
+				7486DD819FC446ADD843051F /* CertWatchTheme.swift in Sources */,
+				A4C2695E9983DA5BF14A3B71 /* CertWatchWidget.swift in Sources */,
+				921FD6B8EC5E6FC4DC58B76E /* CertWatchWidgetBundle.swift in Sources */,
+				21625DFCCFF07A4F2F30F0F7 /* CertificateInfo.swift in Sources */,
+				7ED9C9C4B6360FD381A55F75 /* CertificatePEMParser.swift in Sources */,
+				50AACCB98276D9419109E50E /* CertificateParser.swift in Sources */,
+				C97BF74D7C3C1B9FBBE549A9 /* CertificateService.swift in Sources */,
+				8FFBDF472FD7E927A47F7F15 /* DateFormatting.swift in Sources */,
+				78B060252052EA463E695CDC /* EndpointStore.swift in Sources */,
+				E9DFD075C8932520DB0F946F /* ExpiryBadgeStyle.swift in Sources */,
+				B39A17858DDDCFF5697D0552 /* ExportImportService.swift in Sources */,
+				AF362F94C6565AA48AF083D4 /* FlowLayout.swift in Sources */,
+				0CABDEA5134676719958982B /* GlassCard.swift in Sources */,
+				60BDE86B518E39EA6112BAA2 /* HostnameParser.swift in Sources */,
+				9104F278BC25ABA3C94D8124 /* ModelContainerFactory.swift in Sources */,
+				FABAD6B2FF86B488AE2D1AE2 /* MonitoredEndpoint.swift in Sources */,
+				7867D0A0086CB4C1FAA9D6A1 /* NotificationScheduler.swift in Sources */,
+				7E4662CC1F65DD9BDA85CF77 /* WidgetProvider.swift in Sources */,
+				1109F9180D0A230E08F96BBF /* WidgetViews.swift in Sources */,
+				E197A61D4B21EC46E8379F46 /* X509DERParser.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		502E4A10C2C7AE230E24B92E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EE7763E96B802474B812849B /* CertWatchWidgetExtension */;
+			targetProxy = A2B20F799D1D93FEAEC07A88 /* PBXContainerItemProxy */;
+		};
+		9D5C43574C98A717E5ACBC2B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2C792231599FE2354DDD7DFA /* CertWatch */;
+			targetProxy = 74DB79A6FFF1B58CCA64FC24 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0609DFEFA5BD9A7BF9609B76 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Widget.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Widget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mfrankland.certwatch.widget;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		35778C56F866FFB8A979ADB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mfrankland.certwatch.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CertWatch.app/CertWatch";
+			};
+			name = Release;
+		};
+		79B5241496EBD1F0D47E34BD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5LVS6ZWDJW;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B134E5851933FE2A3CD3CA9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CertWatch.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CertWatch;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "CertWatch connects to hostnames you enter to read TLS certificate expiry information.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mfrankland.certwatch;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C37E1DC8BB7AA2DC8F764F29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Widget.entitlements;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Widget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mfrankland.certwatch.widget;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D9DB0D8CFAE6C68ED8DB18EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CertWatch.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CertWatch;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "CertWatch connects to hostnames you enter to read TLS certificate expiry information.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mfrankland.certwatch;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F36EA832CAF67F86E5A6F5B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mfrankland.certwatch.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CertWatch.app/CertWatch";
+			};
+			name = Debug;
+		};
+		F9E93F9A3AA21528BD3DC2D6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 5LVS6ZWDJW;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		59A9DAD333F5EAB4ED0C74E8 /* Build configuration list for PBXProject "CertWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F9E93F9A3AA21528BD3DC2D6 /* Debug */,
+				79B5241496EBD1F0D47E34BD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8C9893294BE4011B9D639A59 /* Build configuration list for PBXNativeTarget "CertWatchTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F36EA832CAF67F86E5A6F5B5 /* Debug */,
+				35778C56F866FFB8A979ADB8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		94CBC481F394D861C677ADC0 /* Build configuration list for PBXNativeTarget "CertWatchWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C37E1DC8BB7AA2DC8F764F29 /* Debug */,
+				0609DFEFA5BD9A7BF9609B76 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C5583BF3B0C32110573ADB99 /* Build configuration list for PBXNativeTarget "CertWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D9DB0D8CFAE6C68ED8DB18EE /* Debug */,
+				B134E5851933FE2A3CD3CA9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A8E8F5948F216C5FF3434B78 /* Project object */;
+}

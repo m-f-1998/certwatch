@@ -1,0 +1,40 @@
+{
+  "identifier" : "CertWatch",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "certwatch-pro",
+      "localizations" : [
+        {
+          "description" : "Unlimited endpoints, widgets, custom alerts, export/import, and more.",
+          "displayName" : "CertWatch Pro",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "com.mfrankland.certwatch.pro",
+      "referenceName" : "CertWatch Pro",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
