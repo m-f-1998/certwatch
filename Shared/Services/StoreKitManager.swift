@@ -36,19 +36,30 @@ final class StoreKitManager: ObservableObject {
 
         do {
             let result = try await product.purchase()
-            switch result {
-            case .success(let verification):
+            return await completePurchase(result)
+        } catch {
+            purchaseError = error.localizedDescription
+            return false
+        }
+    }
+
+    @discardableResult
+    func completePurchase(_ result: Product.PurchaseResult) async -> Bool {
+        purchaseError = nil
+        switch result {
+        case .success(let verification):
+            do {
                 let transaction = try checkVerified(verification)
                 await transaction.finish()
                 AppSettings.isProUnlocked = true
                 return true
-            case .userCancelled, .pending:
-                return false
-            @unknown default:
+            } catch {
+                purchaseError = error.localizedDescription
                 return false
             }
-        } catch {
-            purchaseError = error.localizedDescription
+        case .userCancelled, .pending:
+            return false
+        @unknown default:
             return false
         }
     }

@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 import UIKit
 import UniformTypeIdentifiers
+import UserNotifications
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
@@ -15,6 +16,8 @@ struct SettingsView: View {
     @State private var exportDocument: ExportDocumentShare?
     @State private var importError: String?
     @State private var importResult: ExportImportService.ImportResult?
+    @State private var notificationStatus = "Checking…"
+    @State private var pendingNotificationCount = 0
 
     var body: some View {
         NavigationStack {
@@ -45,6 +48,9 @@ struct SettingsView: View {
                         Text("Free tier includes one alert 30 days before expiry.")
                             .foregroundStyle(CertWatchTheme.secondaryText)
                     }
+
+                    LabeledContent("Permission", value: notificationStatus)
+                    LabeledContent("Scheduled alerts", value: "\(pendingNotificationCount)")
                 }
 
                 Section("Checks") {
@@ -114,7 +120,31 @@ struct SettingsView: View {
             .sheet(item: $exportDocument) { document in
                 ShareSheet(items: [document.url])
             }
+            .task {
+                await refreshNotificationStatus()
+            }
+            .onAppear {
+                Task { await refreshNotificationStatus() }
+            }
         }
+    }
+
+    private func refreshNotificationStatus() async {
+        let scheduler = NotificationScheduler()
+        let store = EndpointStore(modelContext: modelContext, notificationScheduler: scheduler)
+        await store.syncNotificationsWithEndpoints()
+
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        notificationStatus = switch settings.authorizationStatus {
+        case .authorized: "Allowed"
+        case .provisional: "Provisional"
+        case .denied: "Denied"
+        case .notDetermined: "Not requested"
+        case .ephemeral: "Ephemeral"
+        @unknown default: "Unknown"
+        }
+
+        pendingNotificationCount = await scheduler.certWatchPendingCount()
     }
 
     private func thresholdBinding(for index: Int) -> Binding<Int> {

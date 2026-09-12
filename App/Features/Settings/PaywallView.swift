@@ -15,14 +15,15 @@ struct PaywallView: View {
                         .foregroundStyle(CertWatchTheme.secondaryText)
 
                     featureRow("infinity", "Unlimited endpoints")
+                    featureRow("link", "Full certificate chain inspector")
                     featureRow("bell.badge", "Custom alert thresholds")
                     featureRow("rectangle.grid.2x2", "Home Screen widgets")
                     featureRow("arrow.clockwise.circle", "Daily background refresh")
                     featureRow("tag", "Tags, notes, and export/import")
 
                     if let product = storeKitManager.product {
-                        Text(product.displayPrice)
-                            .font(.title2.bold())
+                        Text("One-time purchase · \(product.localizedDisplayPrice)")
+                            .font(.title3.bold())
                             .padding(.top, 8)
                     }
 
@@ -33,8 +34,14 @@ struct PaywallView: View {
                             }
                         }
                     } label: {
-                        Text(storeKitManager.isPurchasing ? "Purchasing…" : "Unlock Pro")
-                            .frame(maxWidth: .infinity)
+                        Group {
+                            if storeKitManager.isPurchasing {
+                                Text("Purchasing…")
+                            } else {
+                                Text("Unlock Pro")
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(CertWatchTheme.healthy)
@@ -58,6 +65,9 @@ struct PaywallView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close") { dismiss() }
                 }
+            }
+            .task {
+                await storeKitManager.loadProducts()
             }
         }
     }

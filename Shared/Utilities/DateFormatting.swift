@@ -45,4 +45,19 @@ enum DateFormatting {
         }
         return "\(max(hours, 1)) hours"
     }
+
+    static func relativeTimeAgo(since date: Date, from now: Date = .now) -> String {
+        let interval = max(0, now.timeIntervalSince(date))
+        if interval < 60 { return "Just now" }
+        if interval < 3_600 {
+            let minutes = Int(interval / 60)
+            return "\(minutes)m ago"
+        }
+        if interval < 86_400 {
+            let hours = Int(interval / 3_600)
+            return "\(hours)h ago"
+        }
+        let days = Int(interval / 86_400)
+        return "\(days)d ago"
+    }
 }

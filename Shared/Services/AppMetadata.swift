@@ -3,7 +3,7 @@ import Foundation
 enum AppMetadata {
     static let supportURL = URL(string: "https://matthewfrankland.co.uk/certwatch")!
     static let privacyPolicyURL = URL(string: "https://matthewfrankland.co.uk/certwatch/privacy")!
-    static let feedbackEmail = "matthew.frankland@iqx.co.uk"
+    static let feedbackEmail = "certwatch@matthewfrankland.co.uk"
 
     static var versionLabel: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.1"

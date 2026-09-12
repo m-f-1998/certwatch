@@ -5,18 +5,18 @@ import WidgetKit
 @MainActor
 final class EndpointStore: ObservableObject {
     private let modelContext: ModelContext
-    private let certificateService: CertificateService
+    private let certificateService: any CertificateFetching
     private let notificationScheduler: NotificationScheduler
 
     @Published private(set) var isRefreshing = false
 
     init(
         modelContext: ModelContext,
-        certificateService: CertificateService = CertificateService(),
+        certificateService: (any CertificateFetching)? = nil,
         notificationScheduler: NotificationScheduler = NotificationScheduler()
     ) {
         self.modelContext = modelContext
-        self.certificateService = certificateService
+        self.certificateService = certificateService ?? CertificateService()
         self.notificationScheduler = notificationScheduler
     }
 
@@ -49,6 +49,12 @@ final class EndpointStore: ObservableObject {
             throw EndpointStoreError.duplicate
         }
 
+        guard HostnameParser.isValidHostname(hostname), HostnameParser.isValidPort(port) else {
+            throw EndpointStoreError.invalidEndpoint
+        }
+
+        let certificate = try await certificateService.fetchCertificateChain(host: hostname, port: port)
+
         let endpoint = MonitoredEndpoint(
             hostname: hostname,
             port: port,
@@ -58,7 +64,8 @@ final class EndpointStore: ObservableObject {
         )
 
         modelContext.insert(endpoint)
-        try await refresh(endpoint)
+        endpoint.apply(certificate: certificate)
+        await scheduleNotifications(for: endpoint)
         try modelContext.save()
         reloadWidgets()
         return endpoint
@@ -71,10 +78,29 @@ final class EndpointStore: ObservableObject {
                 port: endpoint.port
             )
             endpoint.apply(certificate: certificate)
-            try await notificationScheduler.scheduleNotifications(for: NotificationEndpoint(endpoint))
         } catch {
             endpoint.apply(error: (error as? LocalizedError)?.errorDescription ?? error.localizedDescription)
             throw error
+        }
+
+        await scheduleNotifications(for: endpoint)
+    }
+
+    private func scheduleNotifications(for endpoint: MonitoredEndpoint) async {
+        do {
+            try await notificationScheduler.scheduleNotifications(for: NotificationEndpoint(endpoint))
+        } catch {
+            // Certificate data is still valid even if local notifications could not be scheduled.
+        }
+    }
+
+    func syncNotificationsWithEndpoints() async {
+        do {
+            let endpoints = try fetchAll()
+            let validIDs = Set(endpoints.map(\.id))
+            await notificationScheduler.removeOrphanedNotifications(validEndpointIDs: validIDs)
+        } catch {
+            await notificationScheduler.removeOrphanedNotifications(validEndpointIDs: [])
         }
     }
 
@@ -110,8 +136,23 @@ final class EndpointStore: ObservableObject {
 
     func updateTag(_ endpoint: MonitoredEndpoint, tag: String?) throws {
         guard AppSettings.isProUnlocked else { return }
-        endpoint.tag = tag?.nilIfEmpty
+        endpoint.tag = tag.flatMap { EndpointTags.normalize($0) }
         try modelContext.save()
+    }
+
+    func deleteTag(_ tag: String) throws {
+        guard AppSettings.isProUnlocked else { return }
+        guard let normalized = EndpointTags.normalize(tag) else { return }
+
+        for endpoint in try fetchAll() {
+            if EndpointTags.normalize(endpoint.tag ?? "") == normalized {
+                endpoint.tag = nil
+            }
+        }
+
+        EndpointTags.removeFromCatalog(normalized)
+        try modelContext.save()
+        reloadWidgets()
     }
 
     private func reloadWidgets() {
@@ -122,6 +163,7 @@ final class EndpointStore: ObservableObject {
 enum EndpointStoreError: Error, LocalizedError {
     case limitReached
     case duplicate
+    case invalidEndpoint
 
     var errorDescription: String? {
         switch self {
@@ -129,6 +171,8 @@ enum EndpointStoreError: Error, LocalizedError {
             return "Free tier supports up to \(AppSettings.freeEndpointLimit) endpoints. Upgrade to Pro for unlimited monitoring."
         case .duplicate:
             return "This hostname and port is already being monitored."
+        case .invalidEndpoint:
+            return "Invalid hostname or port."
         }
     }
 }

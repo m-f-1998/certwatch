@@ -12,9 +12,8 @@ struct CertificateInfo: Equatable, Sendable, Codable {
     var pemRepresentation: String
     var chain: [CertificateInfo]
 
-    var leaf: CertificateInfo {
-        chain.first ?? self
-    }
+    /// The server leaf certificate. `chain` holds issuer certificates above the leaf.
+    var leaf: CertificateInfo { self }
 }
 
 extension CertificateInfo {

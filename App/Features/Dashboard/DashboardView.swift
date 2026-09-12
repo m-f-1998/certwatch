@@ -9,6 +9,7 @@ struct DashboardView: View {
 
     @StateObject private var storeHolder = StoreHolder()
     @State private var searchText = ""
+    @State private var selectedTagFilter: String?
     @State private var showingAddSheet = false
     @State private var showingSettings = false
     @State private var showingPaywall = false
@@ -17,6 +18,10 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 14) {
+                    if AppSettings.isProUnlocked, !tagFilterOptions.isEmpty {
+                        TagFilterBar(selectedTag: $selectedTagFilter, tags: tagFilterOptions)
+                    }
+
                     if filteredEndpoints.isEmpty {
                         emptyState
                     } else {
@@ -84,6 +89,7 @@ struct DashboardView: View {
             }
             .onAppear {
                 storeHolder.configureIfNeeded(modelContext: modelContext)
+                Task { await storeHolder.syncNotifications() }
             }
         }
     }
@@ -91,37 +97,88 @@ struct DashboardView: View {
     private var filteredEndpoints: [MonitoredEndpoint] {
         var items = MonitoredEndpoint.sortByExpiry(endpoints)
 
+        if AppSettings.isProUnlocked, let selectedTagFilter {
+            items = items.filter { EndpointTags.normalize($0.tag ?? "") == selectedTagFilter }
+        }
+
         if !searchText.isEmpty {
-            items = items.filter {
-                $0.hostname.localizedCaseInsensitiveContains(searchText)
-                    || ($0.displayName?.localizedCaseInsensitiveContains(searchText) ?? false)
+            items = items.filter { endpoint in
+                endpoint.hostname.localizedCaseInsensitiveContains(searchText)
+                    || (endpoint.displayName?.localizedCaseInsensitiveContains(searchText) ?? false)
+                    || (AppSettings.isProUnlocked && (endpoint.tag?.localizedCaseInsensitiveContains(searchText) ?? false))
+                    || (AppSettings.isProUnlocked && (endpoint.subjectCN?.localizedCaseInsensitiveContains(searchText) ?? false))
+                    || (AppSettings.isProUnlocked && (endpoint.issuerCN?.localizedCaseInsensitiveContains(searchText) ?? false))
             }
         }
 
         return items
     }
 
+    private var tagFilterOptions: [(name: String, count: Int)] {
+        EndpointTags.filterOptions(from: endpoints)
+    }
+
     private var emptyState: some View {
         GlassCard {
             VStack(spacing: 12) {
-                Image(systemName: "network.badge.shield.half.filled")
+                Image(systemName: emptyStateSymbol)
                     .font(.system(size: 36))
                     .foregroundStyle(CertWatchTheme.healthy)
-                Text("Add your first domain")
+                Text(emptyStateTitle)
                     .font(.title3.bold())
-                Text("Monitor certificate expiry and get alerts before downtime.")
+                Text(emptyStateMessage)
                     .font(.subheadline)
                     .foregroundStyle(CertWatchTheme.secondaryText)
                     .multilineTextAlignment(.center)
-                Button("Add Domain") {
-                    showingAddSheet = true
+                if endpoints.isEmpty {
+                    Button("Add Domain") {
+                        showingAddSheet = true
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(CertWatchTheme.healthy)
+                } else if selectedTagFilter != nil {
+                    Button("Show All Tags") {
+                        selectedTagFilter = nil
+                    }
+                    .buttonStyle(.bordered)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(CertWatchTheme.healthy)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
         }
+    }
+
+    private var emptyStateSymbol: String {
+        if selectedTagFilter != nil, !endpoints.isEmpty {
+            return "tag.slash"
+        }
+        return "network.badge.shield.half.filled"
+    }
+
+    private var emptyStateTitle: String {
+        if endpoints.isEmpty {
+            return "Add your first domain"
+        }
+        if selectedTagFilter != nil {
+            return "No domains with this tag"
+        }
+        if !searchText.isEmpty {
+            return "No matching domains"
+        }
+        return "No domains"
+    }
+
+    private var emptyStateMessage: String {
+        if endpoints.isEmpty {
+            return "Monitor certificate expiry and get alerts before downtime."
+        }
+        if let selectedTagFilter {
+            return "Nothing is tagged “\(selectedTagFilter)”. Pick another tag or clear the filter."
+        }
+        if !searchText.isEmpty {
+            return "Try a different search term."
+        }
+        return "Add a domain to start monitoring."
     }
 }
 
@@ -147,11 +204,17 @@ private final class StoreHolder: ObservableObject {
     }
 
     func refreshAll() async {
-        await store?.refreshAll()
+        guard let store, !isRefreshing else { return }
+        isRefreshing = true
+        defer { isRefreshing = false }
+        await store.refreshAll()
+    }
+
+    func syncNotifications() async {
+        await store?.syncNotificationsWithEndpoints()
     }
 
     private func refreshDerivedState(from store: EndpointStore) {
-        isRefreshing = store.isRefreshing
         canAddEndpoint = (try? store.canAddEndpoint()) ?? false
     }
 }
@@ -177,21 +240,43 @@ struct EndpointCardView: View {
                                     .font(CertWatchTheme.monospaced(12))
                                     .foregroundStyle(CertWatchTheme.secondaryText)
                             }
+                            if AppSettings.isProUnlocked,
+                               let tag = EndpointTags.normalize(endpoint.tag ?? "") {
+                                TagChipLabel(title: tag)
+                            }
+                        }
+
+                        if endpoint.showsHostnameSubtitle {
+                            Text(endpoint.hostPortLabel)
+                                .font(CertWatchTheme.monospaced(12))
+                                .foregroundStyle(CertWatchTheme.tertiaryText)
+                        }
+
+                        if endpoint.showsSubjectSubtitle, let subjectCN = endpoint.subjectCN {
+                            Text("Subject: \(subjectCN)")
+                                .font(.caption)
+                                .foregroundStyle(CertWatchTheme.secondaryText)
+                                .lineLimit(1)
                         }
 
                         Text("Issuer: \(endpoint.issuerCN ?? "Unknown")")
                             .font(.caption)
                             .foregroundStyle(CertWatchTheme.secondaryText)
+                            .lineLimit(1)
 
                         if let validUntil = endpoint.validUntil {
                             Text("Expires \(DateFormatting.mediumDate(validUntil))")
                                 .font(.caption)
-                                .foregroundStyle(CertWatchTheme.tertiaryText)
+                                .foregroundStyle(status.color.opacity(0.85))
                         } else if let error = endpoint.lastError {
                             Text(error)
                                 .font(.caption)
                                 .foregroundStyle(CertWatchTheme.muted)
                                 .lineLimit(2)
+                        }
+
+                        if AppSettings.isProUnlocked {
+                            proListingDetails
                         }
                     }
 
@@ -208,5 +293,47 @@ struct EndpointCardView: View {
                 )
             }
         }
+    }
+
+    @ViewBuilder
+    private var proListingDetails: some View {
+        if endpoint.isReachable {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(proMetadataLine)
+                    .font(.caption2)
+                    .foregroundStyle(CertWatchTheme.tertiaryText)
+                    .lineLimit(2)
+
+                if let lastCheckedAt = endpoint.lastCheckedAt {
+                    Text("Checked \(DateFormatting.relativeTimeAgo(since: lastCheckedAt))")
+                        .font(.caption2)
+                        .foregroundStyle(CertWatchTheme.tertiaryText)
+                }
+            }
+            .padding(.top, 2)
+        }
+    }
+
+    private var proMetadataLine: String {
+        var parts: [String] = []
+
+        if let publicKeyDescription = endpoint.publicKeyDescription, publicKeyDescription != "Unknown" {
+            parts.append(publicKeyDescription)
+        }
+
+        let chainCount = endpoint.chainCertificateCount
+        if chainCount > 0 {
+            parts.append("\(chainCount) cert\(chainCount == 1 ? "" : "s")")
+        }
+
+        let sanCount = endpoint.subjectAlternativeNames.count
+        if sanCount > 0 {
+            parts.append("\(sanCount) SAN\(sanCount == 1 ? "" : "s")")
+        }
+
+        if parts.isEmpty {
+            return "Certificate details available"
+        }
+        return parts.joined(separator: " · ")
     }
 }

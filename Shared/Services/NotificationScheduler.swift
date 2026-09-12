@@ -19,6 +19,8 @@ protocol NotificationScheduling: Sendable {
     func scheduleNotifications(for endpoint: NotificationEndpoint) async throws
     func removeNotifications(for endpointID: UUID) async
     func rescheduleAll(_ endpoints: [NotificationEndpoint]) async throws
+    func removeOrphanedNotifications(validEndpointIDs: Set<UUID>) async
+    func certWatchPendingCount() async -> Int
 }
 
 struct NotificationScheduler: NotificationScheduling, @unchecked Sendable {
@@ -39,6 +41,11 @@ struct NotificationScheduler: NotificationScheduling, @unchecked Sendable {
     func scheduleNotifications(for endpoint: NotificationEndpoint) async throws {
         await removeNotifications(for: endpoint.id)
         guard endpoint.isReachable, let validUntil = endpoint.validUntil else { return }
+
+        let settings = await center.notificationSettings()
+        guard settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional else {
+            return
+        }
 
         let thresholds = thresholdsProvider()
         let now = nowProvider()
@@ -83,8 +90,32 @@ struct NotificationScheduler: NotificationScheduling, @unchecked Sendable {
         }
     }
 
+    func removeOrphanedNotifications(validEndpointIDs: Set<UUID>) async {
+        let pending = await center.pendingNotificationRequests()
+        let orphanedIDs = pending.compactMap { request -> String? in
+            guard let parsed = Self.parseNotificationID(request.identifier) else { return nil }
+            return validEndpointIDs.contains(parsed.endpointID) ? nil : request.identifier
+        }
+        guard !orphanedIDs.isEmpty else { return }
+        center.removePendingNotificationRequests(withIdentifiers: orphanedIDs)
+    }
+
+    func certWatchPendingCount() async -> Int {
+        let pending = await center.pendingNotificationRequests()
+        return pending.filter { Self.parseNotificationID($0.identifier) != nil }.count
+    }
+
     static func notificationID(endpointID: UUID, threshold: Int) -> String {
         "\(endpointID.uuidString)-\(threshold)"
+    }
+
+    static func parseNotificationID(_ identifier: String) -> (endpointID: UUID, threshold: Int)? {
+        guard let lastHyphen = identifier.lastIndex(of: "-") else { return nil }
+        let thresholdPart = identifier[identifier.index(after: lastHyphen)...]
+        guard let threshold = Int(thresholdPart) else { return nil }
+        let uuidPart = String(identifier[..<lastHyphen])
+        guard let endpointID = UUID(uuidString: uuidPart) else { return nil }
+        return (endpointID, threshold)
     }
 
     static func notificationBody(for endpoint: MonitoredEndpoint, validUntil: Date, threshold: Int) -> String {

@@ -11,6 +11,9 @@ struct EndpointDetailView: View {
     @State private var isRefreshing = false
     @State private var selectedChainIndex = 0
     @State private var notesDraft = ""
+    @State private var tagDraft = ""
+    @State private var tagSuggestions: [String] = []
+    @State private var notesSaveTask: Task<Void, Never>?
     @State private var errorMessage: String?
 
     var body: some View {
@@ -19,11 +22,15 @@ struct EndpointDetailView: View {
                 heroSection
                 securitySection
                 sanSection
-                chainSection
+                if AppSettings.isProUnlocked {
+                    chainSection
+                } else {
+                    chainProUpsellSection
+                }
                 pemSection
                 metadataSection
                 if AppSettings.isProUnlocked {
-                    notesSection
+                    organisationSection
                 }
                 actionsSection
             }
@@ -37,6 +44,8 @@ struct EndpointDetailView: View {
                 store = EndpointStore(modelContext: modelContext)
             }
             notesDraft = endpoint.notes ?? ""
+            tagDraft = endpoint.tag ?? ""
+            reloadTagSuggestions()
         }
     }
 
@@ -115,6 +124,10 @@ struct EndpointDetailView: View {
                     Text("Chain unavailable until next successful check.")
                         .foregroundStyle(CertWatchTheme.secondaryText)
                 } else {
+                    Text("\(chain.count) certificate\(chain.count == 1 ? "" : "s") in chain")
+                        .font(.footnote)
+                        .foregroundStyle(CertWatchTheme.secondaryText)
+
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
                             ForEach(Array(chain.enumerated()), id: \.offset) { index, cert in
@@ -122,15 +135,18 @@ struct EndpointDetailView: View {
                                     selectedChainIndex = index
                                 } label: {
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text(index == 0 ? "Leaf" : index == chain.count - 1 ? "Root" : "Intermediate")
+                                        Text(chainRole(for: index, count: chain.count))
                                             .font(.caption2.weight(.semibold))
                                             .foregroundStyle(CertWatchTheme.tertiaryText)
                                         Text(cert.subjectCommonName ?? "Unknown")
                                             .font(.caption)
                                             .lineLimit(2)
                                             .multilineTextAlignment(.leading)
+                                        Text(DateFormatting.relativeDaysAndHours(until: cert.validUntil))
+                                            .font(.caption2)
+                                            .foregroundStyle(CertWatchTheme.secondaryText)
                                     }
-                                    .frame(width: 120, alignment: .leading)
+                                    .frame(width: 132, alignment: .leading)
                                     .padding(10)
                                     .background(
                                         RoundedRectangle(cornerRadius: 12)
@@ -144,12 +160,39 @@ struct EndpointDetailView: View {
 
                     if chain.indices.contains(selectedChainIndex) {
                         let cert = chain[selectedChainIndex]
+                        detailRow("Role", chainRole(for: selectedChainIndex, count: chain.count))
+                        detailRow("Subject", cert.subjectCommonName ?? "Unknown")
+                        detailRow("Issuer", cert.issuerCommonName ?? "Unknown")
                         detailRow("Valid From", DateFormatting.mediumDateTime(cert.validFrom))
                         detailRow("Valid Until", DateFormatting.mediumDateTime(cert.validUntil))
+                        detailRow("Time Remaining", DateFormatting.relativeDaysAndHours(until: cert.validUntil))
+                        detailRow("Serial", cert.serialNumber)
+                        detailRow("Signature", cert.signatureAlgorithm)
+                        detailRow("Public Key", cert.publicKeyDescription)
+                        if !cert.subjectAlternativeNames.isEmpty {
+                            detailRow("SANs", cert.subjectAlternativeNames.joined(separator: ", "))
+                        }
                     }
                 }
             }
         }
+    }
+
+    private var chainProUpsellSection: some View {
+        GlassCard {
+            VStack(alignment: .leading, spacing: 8) {
+                SectionHeader(title: "Certificate Chain")
+                Text("Upgrade to Pro to inspect the full TLS chain — leaf, intermediates, and root — with expiry, issuer, and key details for each certificate.")
+                    .font(.footnote)
+                    .foregroundStyle(CertWatchTheme.secondaryText)
+            }
+        }
+    }
+
+    private func chainRole(for index: Int, count: Int) -> String {
+        if index == 0 { return "Leaf" }
+        if index == count - 1 { return "Root" }
+        return "Intermediate"
     }
 
     private var pemSection: some View {
@@ -194,17 +237,44 @@ struct EndpointDetailView: View {
         }
     }
 
-    private var notesSection: some View {
+    private var organisationSection: some View {
         GlassCard {
-            VStack(alignment: .leading, spacing: 10) {
-                SectionHeader(title: "Notes")
-                TextField("Renew via Cloudflare…", text: $notesDraft, axis: .vertical)
-                    .lineLimit(2...5)
-                    .onSubmit { saveNotes() }
-                Button("Save Notes") { saveNotes() }
-                    .buttonStyle(.bordered)
+            VStack(alignment: .leading, spacing: 16) {
+                SectionHeader(title: "Organisation")
+                TagPickerField(
+                    selection: $tagDraft,
+                    suggestions: tagSuggestions,
+                    onDeleteTag: { tag in
+                        deleteTagFromCatalog(tag)
+                    }
+                )
+                .onChange(of: tagDraft) { _, newValue in
+                    saveTag(newValue)
+                }
+
+                Divider().overlay(Color.white.opacity(0.08))
+
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("NOTES")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(CertWatchTheme.tertiaryText)
+                    TextField("Renew via Cloudflare…", text: $notesDraft, axis: .vertical)
+                        .lineLimit(2...5)
+                        .onChange(of: notesDraft) { _, _ in
+                            scheduleNotesSave()
+                        }
+                }
             }
         }
+    }
+
+    private func reloadTagSuggestions() {
+        guard let store else {
+            tagSuggestions = EndpointTags.suggested
+            return
+        }
+        let endpoints = (try? store.fetchAll()) ?? []
+        tagSuggestions = EndpointTags.pickerOptions(from: endpoints)
     }
 
     private var actionsSection: some View {
@@ -263,7 +333,40 @@ struct EndpointDetailView: View {
         }
     }
 
-    private func saveNotes() {
+    private func scheduleNotesSave() {
+        notesSaveTask?.cancel()
+        notesSaveTask = Task {
+            try? await Task.sleep(for: .milliseconds(400))
+            guard !Task.isCancelled else { return }
+            await MainActor.run {
+                saveNotesIfChanged()
+            }
+        }
+    }
+
+    private func saveNotesIfChanged() {
+        let trimmed = notesDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+        let newValue = trimmed.isEmpty ? nil : trimmed
+        guard newValue != endpoint.notes else { return }
         try? store?.updateNotes(endpoint, notes: notesDraft)
+    }
+
+    private func saveTag(_ rawTag: String) {
+        let normalized = EndpointTags.normalize(rawTag)
+        let current = EndpointTags.normalize(endpoint.tag ?? "")
+        guard normalized != current else { return }
+        if let normalized {
+            EndpointTags.remember(normalized)
+        }
+        try? store?.updateTag(endpoint, tag: normalized)
+        reloadTagSuggestions()
+    }
+
+    private func deleteTagFromCatalog(_ tag: String) {
+        try? store?.deleteTag(tag)
+        if EndpointTags.normalize(tagDraft) == EndpointTags.normalize(tag) {
+            tagDraft = ""
+        }
+        reloadTagSuggestions()
     }
 }

@@ -32,21 +32,44 @@ enum HostnameParser {
 
     enum ParseError: Error, Equatable, LocalizedError {
         case empty
+        case invalidURL
         case invalidHost
         case invalidPort
+        case unsupportedScheme(String)
 
         var errorDescription: String? {
             switch self {
-            case .empty: return "Enter a hostname or URL."
-            case .invalidHost: return "Invalid hostname or IP address."
-            case .invalidPort: return "Port must be between 1 and 65535."
+            case .empty:
+                return "Enter a hostname or URL."
+            case .invalidURL:
+                return "Enter a valid URL such as api.example.com or https://host:8443."
+            case .invalidHost:
+                return "Invalid hostname or IP address."
+            case .invalidPort:
+                return "Port must be between 1 and 65535."
+            case .unsupportedScheme(let scheme):
+                return "Use http:// or https:// URLs. “\(scheme)://” is not supported."
             }
         }
     }
 
+    private static let supportedSchemes: Set<String> = ["http", "https"]
+
     private static func parseURL(_ input: String, defaultPort: Int) -> Result<ParsedHost, ParseError> {
-        guard let components = URLComponents(string: input), let host = components.host, !host.isEmpty else {
-            return .failure(.invalidHost)
+        guard let components = URLComponents(string: input) else {
+            return .failure(.invalidURL)
+        }
+
+        if let scheme = components.scheme?.lowercased(), !supportedSchemes.contains(scheme) {
+            return .failure(.unsupportedScheme(scheme))
+        }
+
+        if components.user != nil || components.password != nil {
+            return .failure(.invalidURL)
+        }
+
+        guard let host = components.host, !host.isEmpty else {
+            return .failure(.invalidURL)
         }
 
         let port = components.port ?? defaultPort

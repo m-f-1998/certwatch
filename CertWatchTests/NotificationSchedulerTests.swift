@@ -23,6 +23,19 @@ final class NotificationSchedulerTests: XCTestCase {
         XCTAssertEqual(NotificationScheduler.notificationID(endpointID: id, threshold: 7), "\(id.uuidString)-7")
     }
 
+    func testParseNotificationIDRoundTrip() {
+        let id = UUID(uuidString: "550e8400-e29b-41d4-a716-446655440000")!
+        let identifier = NotificationScheduler.notificationID(endpointID: id, threshold: 30)
+        let parsed = NotificationScheduler.parseNotificationID(identifier)
+        XCTAssertEqual(parsed?.endpointID, id)
+        XCTAssertEqual(parsed?.threshold, 30)
+    }
+
+    func testParseNotificationIDRejectsNonCertWatchIdentifiers() {
+        XCTAssertNil(NotificationScheduler.parseNotificationID("some-other-notification"))
+        XCTAssertNil(NotificationScheduler.parseNotificationID("not-a-uuid-30"))
+    }
+
     func testNotificationBodyIncludesHostThresholdAndDate() {
         let validUntil = calendar.date(from: DateComponents(year: 2026, month: 10, day: 17))!
         let endpoint = endpoint(validUntil: validUntil)

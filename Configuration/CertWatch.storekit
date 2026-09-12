@@ -8,6 +8,7 @@
       "displayPrice" : "4.99",
       "familyShareable" : false,
       "internalID" : "certwatch-pro",
+      "price" : 4.99,
       "localizations" : [
         {
           "description" : "Unlimited endpoints, widgets, custom alerts, export/import, and more.",
@@ -21,6 +22,7 @@
     }
   ],
   "settings" : {
+    "_storefront" : "GBR",
     "_failTransactionsEnabled" : false,
     "_storeKitErrors" : [
       {

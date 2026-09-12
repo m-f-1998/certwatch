@@ -95,6 +95,19 @@ final class HostnameParserTests: XCTestCase {
         }
     }
 
+    func testUnsupportedURLSchemeFails() {
+        XCTAssertEqual(
+            HostnameParser.parse("ftp://files.example.com"),
+            .failure(.unsupportedScheme("ftp"))
+        )
+    }
+
+    func testURLWithCredentialsFails() {
+        if case .success = HostnameParser.parse("https://user:pass@example.com") {
+            XCTFail("Expected credentials in URL to fail")
+        }
+    }
+
     func testInvalidHostnameMatrix() {
         let invalid = [
             "",

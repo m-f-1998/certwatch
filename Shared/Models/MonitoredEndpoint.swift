@@ -60,27 +60,40 @@ final class MonitoredEndpoint {
         return sanSummary.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
     }
 
+    var chainCertificateCount: Int {
+        guard let chainPEMData,
+              let text = String(data: chainPEMData, encoding: .utf8) else {
+            return 0
+        }
+        return text.components(separatedBy: "-----BEGIN CERTIFICATE-----").count - 1
+    }
+
+    var showsHostnameSubtitle: Bool {
+        guard let displayName, !displayName.isEmpty else { return false }
+        return displayName != hostname
+    }
+
+    var showsSubjectSubtitle: Bool {
+        guard let subjectCN, !subjectCN.isEmpty else { return false }
+        return subjectCN != hostname && subjectCN != displayName
+    }
+
     func apply(certificate: CertificateInfo, checkedAt: Date = .now) {
-        let leaf = certificate.leaf
         isReachable = true
         lastError = nil
         lastCheckedAt = checkedAt
-        subjectCN = leaf.subjectCommonName
-        issuerCN = leaf.issuerCommonName
-        validFrom = leaf.validFrom
-        validUntil = leaf.validUntil
-        sanSummary = leaf.subjectAlternativeNames.joined(separator: ", ")
-        pemData = leaf.pemRepresentation.data(using: .utf8)
-        serialNumber = leaf.serialNumber
-        signatureAlgorithm = leaf.signatureAlgorithm
-        publicKeyDescription = leaf.publicKeyDescription
+        subjectCN = certificate.subjectCommonName
+        issuerCN = certificate.issuerCommonName
+        validFrom = certificate.validFrom
+        validUntil = certificate.validUntil
+        sanSummary = certificate.subjectAlternativeNames.joined(separator: ", ")
+        pemData = certificate.pemRepresentation.data(using: .utf8)
+        serialNumber = certificate.serialNumber
+        signatureAlgorithm = certificate.signatureAlgorithm
+        publicKeyDescription = certificate.publicKeyDescription
 
-        if !certificate.chain.isEmpty {
-            let joined = certificate.chain.map(\.pemRepresentation).joined(separator: "\n")
-            chainPEMData = joined.data(using: .utf8)
-        } else {
-            chainPEMData = leaf.pemRepresentation.data(using: .utf8)
-        }
+        let chainPEMs = [certificate.pemRepresentation] + certificate.chain.map(\.pemRepresentation)
+        chainPEMData = chainPEMs.joined(separator: "\n").data(using: .utf8)
     }
 
     func apply(error: String, checkedAt: Date = .now) {
