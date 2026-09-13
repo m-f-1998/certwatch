@@ -9,8 +9,8 @@ struct CertWatchSmallWidget: Widget {
             SmallWidgetView(entry: entry)
                 .containerBackground(CertWatchTheme.widgetCanvas, for: .widget)
         }
-        .configurationDisplayName("Soonest Certificate")
-        .description("Shows the certificate expiring soonest.")
+        .configurationDisplayName("Next Expiring Certificate")
+        .description("Shows the certificate that expires next.")
         .supportedFamilies([.systemSmall])
     }
 }

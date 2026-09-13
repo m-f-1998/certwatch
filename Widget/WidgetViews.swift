@@ -17,7 +17,7 @@ struct SmallWidgetView: View {
                 Text("\(max(endpoint.daysRemaining, 0))d")
                     .font(CertWatchTheme.monospaced(28, weight: .bold))
                     .foregroundStyle(endpoint.status.color)
-                Text("Expires soonest")
+                Text("Next to expire")
                     .font(.caption)
                     .foregroundStyle(CertWatchTheme.widgetSecondaryText)
             }

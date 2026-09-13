@@ -46,6 +46,12 @@ enum ExportImportService {
         var imported = 0
         var skipped = 0
 
+        guard !document.endpoints.isEmpty else {
+            return ImportResult(imported: 0, skipped: 0)
+        }
+
+        await NotificationScheduler().requestAuthorizationIfNeeded()
+
         for item in document.endpoints {
             do {
                 _ = try await store.addEndpoint(

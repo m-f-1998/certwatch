@@ -7,6 +7,7 @@ import UserNotifications
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var storeKitManager: StoreKitManager
 
     @State private var thresholds = AppSettings.notificationThresholds
@@ -14,10 +15,16 @@ struct SettingsView: View {
     @State private var backgroundRefresh = AppSettings.backgroundRefreshEnabled
     @State private var showingPaywall = false
     @State private var exportDocument: ExportDocumentShare?
-    @State private var importError: String?
-    @State private var importResult: ExportImportService.ImportResult?
+    @State private var dataError: String?
     @State private var notificationStatus = "Checking…"
     @State private var pendingNotificationCount = 0
+    #if DEBUG
+    @State private var upcomingAlerts: [ScheduledAlert] = []
+    @State private var notificationFooter: String?
+    @State private var isSendingTestNotification = false
+    @State private var isReschedulingNotifications = false
+    @State private var isUpcomingAlertsExpanded = false
+    #endif
 
     var body: some View {
         NavigationStack {
@@ -30,7 +37,7 @@ struct SettingsView: View {
                     }
                 }
 
-                Section("Notifications") {
+                Section {
                     if AppSettings.isProUnlocked {
                         Stepper(value: thresholdBinding(for: 0), in: 1...365) {
                             Text("First alert: \(thresholds[safe: 0] ?? 30) days before")
@@ -51,6 +58,29 @@ struct SettingsView: View {
 
                     LabeledContent("Permission", value: notificationStatus)
                     LabeledContent("Scheduled alerts", value: "\(pendingNotificationCount)")
+
+                    if notificationStatus == "Denied" {
+                        Button("Open iOS Notification Settings") {
+                            openNotificationSettings()
+                        }
+                    }
+
+                    #if DEBUG
+                    notificationDebugSection
+                    #endif
+                } header: {
+                    Text("Notifications")
+                } footer: {
+                    if notificationStatus == "Denied" {
+                        Text("Enable notifications in iOS Settings, then return to CertWatch — your alerts will reschedule automatically.")
+                    } else if notificationStatus == "Not requested" {
+                        Text("You'll be asked to allow notifications when you add or import a domain.")
+                    }
+                    #if DEBUG
+                    if let notificationFooter {
+                        Text(notificationFooter)
+                    }
+                    #endif
                 }
 
                 Section("Checks") {
@@ -60,23 +90,36 @@ struct SettingsView: View {
                     }
                     if AppSettings.isProUnlocked {
                         Toggle("Daily background refresh", isOn: $backgroundRefresh)
+                        Text("About once a day, CertWatch re-checks your saved domains in the background and updates expiry dates, alerts, and widgets. iOS decides the exact timing.")
+                            .font(.caption)
+                            .foregroundStyle(CertWatchTheme.secondaryText)
                     }
                 }
 
                 if AppSettings.isProUnlocked {
-                    Section("Data") {
+                    Section {
                         Button("Export Endpoints") {
                             exportEndpoints()
                         }
                         .disabled(exportDocument != nil)
 
-                        ImportEndpointButton { result in
-                            switch result {
-                            case .success(let summary):
-                                importResult = summary
-                            case .failure(let error):
-                                importError = error.localizedDescription
+                        ImportEndpointButton(
+                            onStart: { dataError = nil },
+                            onComplete: { result in
+                                switch result {
+                                case .success:
+                                    Task { await saveSettingsAndDismiss() }
+                                case .failure(let error):
+                                    dataError = error.localizedDescription
+                                }
                             }
+                        )
+                    } header: {
+                        Text("Data")
+                    } footer: {
+                        if let dataError {
+                            Text(dataError)
+                                .foregroundStyle(CertWatchTheme.critical)
                         }
                     }
                 }
@@ -88,18 +131,6 @@ struct SettingsView: View {
                     LabeledContent("Version", value: AppMetadata.versionLabel)
                 }
 
-                if let importResult {
-                    Section {
-                        Text("Imported \(importResult.imported), skipped \(importResult.skipped) duplicates.")
-                    }
-                }
-
-                if let importError {
-                    Section {
-                        Text(importError)
-                            .foregroundStyle(CertWatchTheme.critical)
-                    }
-                }
             }
             .scrollContentBackground(.hidden)
             .background(CertWatchTheme.canvas)
@@ -108,8 +139,9 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
-                        saveSettings()
-                        dismiss()
+                        Task {
+                            await saveSettingsAndDismiss()
+                        }
                     }
                 }
             }
@@ -124,14 +156,35 @@ struct SettingsView: View {
                 await refreshNotificationStatus()
             }
             .onAppear {
+                reloadThresholdsFromSettings()
                 Task { await refreshNotificationStatus() }
             }
+            .onChange(of: scenePhase) { _, phase in
+                guard phase == .active else { return }
+                Task { await refreshNotificationStatus() }
+            }
+        }
+    }
+
+    private func openNotificationSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
+    }
+
+    private func reloadThresholdsFromSettings() {
+        if AppSettings.isProUnlocked {
+            thresholds = AppSettings.normalizedProThresholds(
+                AppSettings.notificationThresholds
+            )
+        } else {
+            thresholds = AppSettings.notificationThresholds
         }
     }
 
     private func refreshNotificationStatus() async {
         let scheduler = NotificationScheduler()
         let store = EndpointStore(modelContext: modelContext, notificationScheduler: scheduler)
+        let didReschedule = await NotificationRescheduleService.rescheduleIfAuthorizationGranted()
         await store.syncNotificationsWithEndpoints()
 
         let settings = await UNUserNotificationCenter.current().notificationSettings()
@@ -145,7 +198,127 @@ struct SettingsView: View {
         }
 
         pendingNotificationCount = await scheduler.certWatchPendingCount()
+        #if DEBUG
+        upcomingAlerts = await scheduler.pendingAlerts()
+        if didReschedule {
+            notificationFooter = "Alerts rescheduled after notification permission changed."
+        }
+        #endif
     }
+
+    #if DEBUG
+    @ViewBuilder
+    private var notificationDebugSection: some View {
+        if let nextAlert = upcomingAlerts.first, let fireDate = nextAlert.fireDate {
+            LabeledContent("Next alert") {
+                Text(DateFormatting.mediumDateTime(fireDate))
+                    .foregroundStyle(CertWatchTheme.secondaryText)
+            }
+            Text("\(nextAlert.hostPortLabel) · \(nextAlert.threshold) days before")
+                .font(.caption)
+                .foregroundStyle(CertWatchTheme.tertiaryText)
+        } else if notificationStatus == "Allowed" {
+            Text("No upcoming alerts. Tap Reschedule below after changing thresholds or adding domains.")
+                .font(.caption)
+                .foregroundStyle(CertWatchTheme.secondaryText)
+        }
+
+        Button {
+            Task { await sendTestNotification() }
+        } label: {
+            if isSendingTestNotification {
+                HStack {
+                    ProgressView()
+                    Text("Scheduling test…")
+                }
+            } else {
+                Text("Send test alert in 10 seconds")
+            }
+        }
+        .disabled(isSendingTestNotification || notificationStatus == "Denied")
+
+        Button {
+            Task { await rescheduleNotificationsNow() }
+        } label: {
+            if isReschedulingNotifications {
+                HStack {
+                    ProgressView()
+                    Text("Rescheduling…")
+                }
+            } else {
+                Text("Reschedule alerts now")
+            }
+        }
+        .disabled(isReschedulingNotifications || notificationStatus == "Denied")
+
+        if !upcomingAlerts.isEmpty {
+            DisclosureGroup(
+                "Upcoming alerts (\(upcomingAlerts.count))",
+                isExpanded: $isUpcomingAlertsExpanded
+            ) {
+                ForEach(upcomingAlerts.prefix(8)) { alert in
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(alert.hostPortLabel)
+                            .font(.subheadline.weight(.semibold))
+                        if let fireDate = alert.fireDate {
+                            Text(DateFormatting.mediumDateTime(fireDate))
+                                .font(.caption)
+                                .foregroundStyle(CertWatchTheme.secondaryText)
+                        }
+                        Text("Alert threshold: \(alert.threshold) days before expiry")
+                            .font(.caption2)
+                            .foregroundStyle(CertWatchTheme.tertiaryText)
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+        }
+
+        Text("Debug only — not shown in App Store builds. Alerts are scheduled locally; background refresh re-checks certificates only.")
+            .font(.caption)
+            .foregroundStyle(CertWatchTheme.tertiaryText)
+    }
+
+    private func sendTestNotification() async {
+        isSendingTestNotification = true
+        notificationFooter = nil
+        defer { isSendingTestNotification = false }
+
+        let scheduler = NotificationScheduler()
+        do {
+            try await scheduler.scheduleTestNotification(after: 10)
+            notificationFooter = "Test alert scheduled. Background the app or lock your phone within 10 seconds."
+        } catch {
+            notificationFooter = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+        }
+    }
+
+    private func rescheduleNotificationsNow() async {
+        isReschedulingNotifications = true
+        notificationFooter = nil
+        defer { isReschedulingNotifications = false }
+
+        if AppSettings.isProUnlocked {
+            AppSettings.notificationThresholds = AppSettings.normalizedProThresholds(thresholds)
+        }
+
+        let scheduler = NotificationScheduler()
+        let store = EndpointStore(modelContext: modelContext, notificationScheduler: scheduler)
+        do {
+            try await store.rescheduleAllNotifications()
+            await refreshNotificationStatus()
+            isUpcomingAlertsExpanded = true
+            let thresholdSummary = AppSettings.uniqueThresholdsForScheduling(
+                AppSettings.notificationThresholds
+            )
+                .map { "\($0)d" }
+                .joined(separator: ", ")
+            notificationFooter = "Scheduled \(pendingNotificationCount) alert\(pendingNotificationCount == 1 ? "" : "s") (\(thresholdSummary))."
+        } catch {
+            notificationFooter = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+        }
+    }
+    #endif
 
     private func thresholdBinding(for index: Int) -> Binding<Int> {
         Binding(
@@ -159,16 +332,22 @@ struct SettingsView: View {
         )
     }
 
-    private func saveSettings() {
+    private func saveSettingsAndDismiss() async {
         AppSettings.defaultCheckPort = defaultPort
         if AppSettings.isProUnlocked {
-            AppSettings.notificationThresholds = thresholds
+            AppSettings.notificationThresholds = AppSettings.normalizedProThresholds(thresholds)
             AppSettings.backgroundRefreshEnabled = backgroundRefresh
             BackgroundRefreshService.scheduleNextRefresh()
         }
+
+        let scheduler = NotificationScheduler()
+        let store = EndpointStore(modelContext: modelContext, notificationScheduler: scheduler)
+        try? await store.rescheduleAllNotifications()
+        dismiss()
     }
 
     private func exportEndpoints() {
+        dataError = nil
         do {
             let endpoints = try modelContext.fetch(FetchDescriptor<MonitoredEndpoint>())
             let data = try ExportImportService.export(endpoints: endpoints)
@@ -176,7 +355,7 @@ struct SettingsView: View {
             try data.write(to: url)
             exportDocument = ExportDocumentShare(url: url)
         } catch {
-            importError = error.localizedDescription
+            dataError = error.localizedDescription
         }
     }
 }
@@ -197,12 +376,14 @@ private struct ShareSheet: UIViewControllerRepresentable {
 }
 
 private struct ImportEndpointButton: View {
+    let onStart: () -> Void
     let onComplete: (Result<ExportImportService.ImportResult, Error>) -> Void
     @Environment(\.modelContext) private var modelContext
     @State private var showingImporter = false
 
     var body: some View {
         Button("Import Endpoints") {
+            onStart()
             showingImporter = true
         }
         .fileImporter(isPresented: $showingImporter, allowedContentTypes: [.json]) { result in

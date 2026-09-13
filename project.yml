@@ -55,6 +55,25 @@ targets:
     dependencies:
       - target: CertWatchWidgetExtension
         embed: true
+    postBuildScripts:
+      - name: Strip embedded test frameworks
+        script: |
+          FRAMEWORKS_DIR="${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Frameworks"
+          if [ -d "$FRAMEWORKS_DIR" ]; then
+            find "$FRAMEWORKS_DIR" -maxdepth 1 \( \
+              -name 'Testing.framework' -o \
+              -name 'XCTAutomationSupport.framework' -o \
+              -name 'XCTest.framework' -o \
+              -name 'XCTestCore.framework' -o \
+              -name 'XCTestSupport.framework' -o \
+              -name 'XCUIAutomation.framework' -o \
+              -name 'XCUnit.framework' -o \
+              -name 'libXCTestBundleInject.dylib' -o \
+              -name 'libXCTestSwiftSupport.dylib' \
+            \) -exec rm -rf {} +
+            rmdir "$FRAMEWORKS_DIR" 2>/dev/null || true
+          fi
+        basedOnDependencyAnalysis: false
     scheme:
       testTargets:
         - CertWatchTests

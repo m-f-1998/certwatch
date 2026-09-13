@@ -42,7 +42,7 @@ enum CertificateParser {
         let certificates = copyCertificateChain(from: trust)
         guard !certificates.isEmpty else { return nil }
 
-        var nodes = certificates.map { parse($0) }
+        let nodes = certificates.map { parse($0) }
         guard let leaf = nodes.first else { return nil }
 
         var chainRoot = leaf
@@ -51,14 +51,14 @@ enum CertificateParser {
     }
 
     private static func copyCertificateChain(from trust: SecTrust) -> [SecCertificate] {
-        if let chain = SecTrustCopyCertificateChain(trust) as? [SecCertificate], !chain.isEmpty {
-            return chain
-        }
-
-        let count = SecTrustGetCertificateCount(trust)
+        guard let cfChain = SecTrustCopyCertificateChain(trust) else { return [] }
+        let count = CFArrayGetCount(cfChain)
         guard count > 0 else { return [] }
 
-        return (0..<count).compactMap { SecTrustGetCertificateAtIndex(trust, $0) }
+        return (0..<count).compactMap { index in
+            guard let value = CFArrayGetValueAtIndex(cfChain, index) else { return nil }
+            return Unmanaged<SecCertificate>.fromOpaque(value).takeUnretainedValue()
+        }
     }
 
     private static func copyNotValidBefore(from certificate: SecCertificate) -> Date? {

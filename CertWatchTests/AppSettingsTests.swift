@@ -36,4 +36,42 @@ final class AppSettingsTests: XCTestCase {
         AppSettings.defaultCheckPort = 0
         XCTAssertEqual(AppSettings.defaultCheckPort, 443)
     }
+
+    func testUnlockProMigratesFreeThresholdsToDefaults() {
+        AppSettings.isProUnlocked = false
+        AppSettings.notificationThresholds = AppSettings.freeThresholds
+
+        AppSettings.unlockPro()
+
+        XCTAssertTrue(AppSettings.isProUnlocked)
+        XCTAssertEqual(AppSettings.notificationThresholds, AppSettings.defaultThresholds)
+    }
+
+    func testLastNotificationAuthorizationStatusRoundTrip() {
+        AppSettings.lastNotificationAuthorizationStatus = .denied
+        XCTAssertEqual(AppSettings.lastNotificationAuthorizationStatus, .denied)
+
+        AppSettings.lastNotificationAuthorizationStatus = .authorized
+        XCTAssertEqual(AppSettings.lastNotificationAuthorizationStatus, .authorized)
+
+        AppSettings.lastNotificationAuthorizationStatus = nil
+        XCTAssertNil(AppSettings.lastNotificationAuthorizationStatus)
+    }
+
+    func testNormalizedProThresholdsFillMissingSlotsFromDefaults() {
+        AppSettings.isProUnlocked = true
+        AppSettings.notificationThresholds = [50, 7]
+
+        XCTAssertEqual(AppSettings.notificationThresholds, [50, 7, 7, 1])
+        XCTAssertEqual(AppSettings.uniqueThresholdsForScheduling(AppSettings.notificationThresholds), [50, 7, 1])
+    }
+
+    func testUnlockProPreservesCustomThresholds() {
+        AppSettings.isProUnlocked = false
+        AppSettings.notificationThresholds = [50, 51]
+
+        AppSettings.unlockPro()
+
+        XCTAssertEqual(AppSettings.notificationThresholds, [51, 50])
+    }
 }

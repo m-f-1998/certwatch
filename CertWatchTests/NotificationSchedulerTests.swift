@@ -1,3 +1,4 @@
+import UserNotifications
 import XCTest
 @testable import CertWatch
 
@@ -60,6 +61,26 @@ final class NotificationSchedulerTests: XCTestCase {
         XCTAssertEqual(calendar.component(.month, from: fireDate), 11)
     }
 
+    func testNotificationIDsAreUniquePerThreshold() {
+        let id = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
+        XCTAssertNotEqual(
+            NotificationScheduler.notificationID(endpointID: id, threshold: 30),
+            NotificationScheduler.notificationID(endpointID: id, threshold: 14)
+        )
+    }
+
+    func testApplicableThresholdsSkipsThresholdsBeyondDaysRemaining() {
+        let validUntil = calendar.date(byAdding: .day, value: 50, to: now)!
+        let applicable = NotificationScheduler.applicableThresholds(
+            [52, 50, 7, 1],
+            daysRemaining: 50,
+            validUntil: validUntil,
+            now: now,
+            calendar: calendar
+        )
+        XCTAssertEqual(applicable, [50, 7, 1])
+    }
+
     func testThresholdSchedulingSkipsPastDates() {
         let validUntil = calendar.date(byAdding: .day, value: 10, to: now)!
         let thresholds = [30, 14, 7, 1]
@@ -68,6 +89,18 @@ final class NotificationSchedulerTests: XCTestCase {
             return fireDate > now
         }
         XCTAssertEqual(validThresholds, [7, 1])
+    }
+
+    func testTriggerUsesIntervalForAlertsWithinOneDay() {
+        let fireDate = now.addingTimeInterval(3_600)
+        let trigger = NotificationScheduler.trigger(for: fireDate, now: now)
+        XCTAssertTrue(trigger is UNTimeIntervalNotificationTrigger)
+    }
+
+    func testTriggerUsesCalendarForAlertsBeyondOneDay() {
+        let fireDate = now.addingTimeInterval(2 * 86_400)
+        let trigger = NotificationScheduler.trigger(for: fireDate, now: now)
+        XCTAssertTrue(trigger is UNCalendarNotificationTrigger)
     }
 
     func testThresholdMatrixProducesExpectedCounts() {

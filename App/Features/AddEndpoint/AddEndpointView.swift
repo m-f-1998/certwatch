@@ -1,5 +1,4 @@
 import SwiftUI
-import UserNotifications
 
 struct AddEndpointView: View {
     let store: EndpointStore?
@@ -160,7 +159,7 @@ struct AddEndpointView: View {
             if let normalizedTag {
                 EndpointTags.remember(normalizedTag)
             }
-            await requestNotificationPermissionIfNeeded()
+            await NotificationScheduler().requestAuthorizationIfNeeded()
             _ = try await store.addEndpoint(
                 hostname: parsed.hostname,
                 port: parsed.port,
@@ -176,7 +175,4 @@ struct AddEndpointView: View {
         }
     }
 
-    private func requestNotificationPermissionIfNeeded() async {
-        _ = try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])
-    }
 }

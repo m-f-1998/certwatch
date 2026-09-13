@@ -51,7 +51,9 @@ final class StoreKitManager: ObservableObject {
             do {
                 let transaction = try checkVerified(verification)
                 await transaction.finish()
-                AppSettings.isProUnlocked = true
+                AppSettings.unlockPro()
+                await NotificationRescheduleService.rescheduleAll()
+                BackgroundRefreshService.scheduleNextRefresh()
                 return true
             } catch {
                 purchaseError = error.localizedDescription
@@ -77,7 +79,9 @@ final class StoreKitManager: ObservableObject {
         for await result in Transaction.currentEntitlements {
             guard let transaction = try? checkVerified(result) else { continue }
             if transaction.productID == AppSettings.proProductID {
-                AppSettings.isProUnlocked = true
+                AppSettings.unlockPro()
+                await NotificationRescheduleService.rescheduleAll()
+                BackgroundRefreshService.scheduleNextRefresh()
                 return
             }
         }
@@ -87,7 +91,9 @@ final class StoreKitManager: ObservableObject {
         for await result in Transaction.updates {
             guard let transaction = try? checkVerified(result) else { continue }
             if transaction.productID == AppSettings.proProductID {
-                AppSettings.isProUnlocked = true
+                AppSettings.unlockPro()
+                await NotificationRescheduleService.rescheduleAll()
+                BackgroundRefreshService.scheduleNextRefresh()
             }
             await transaction.finish()
         }

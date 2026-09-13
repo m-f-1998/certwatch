@@ -87,6 +87,7 @@ final class EndpointStore: ObservableObject {
     }
 
     private func scheduleNotifications(for endpoint: MonitoredEndpoint) async {
+        await notificationScheduler.requestAuthorizationIfNeeded()
         do {
             try await notificationScheduler.scheduleNotifications(for: NotificationEndpoint(endpoint))
         } catch {
@@ -102,6 +103,11 @@ final class EndpointStore: ObservableObject {
         } catch {
             await notificationScheduler.removeOrphanedNotifications(validEndpointIDs: [])
         }
+    }
+
+    func rescheduleAllNotifications() async throws {
+        let endpoints = try fetchAll().map(NotificationEndpoint.init)
+        try await notificationScheduler.rescheduleAll(endpoints)
     }
 
     func refreshAll() async {

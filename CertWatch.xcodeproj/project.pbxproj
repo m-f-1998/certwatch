@@ -16,6 +16,7 @@
 		1109F9180D0A230E08F96BBF /* WidgetViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 355DCD075935D7CDD4902B56 /* WidgetViews.swift */; };
 		133AE18E1B9F9295191E2714 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F98FB12A1FBC5D87C69CCB /* StoreKitManager.swift */; };
 		1566683C64C0E6C8A786AD88 /* MonitoredEndpoint+Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D68D81C5E265FFA3C9C0E8 /* MonitoredEndpoint+Display.swift */; };
+		1DF80F4E73E4E4D8FE7DD964 /* NotificationRescheduleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD2EC04F261417C3C62D1EB /* NotificationRescheduleService.swift */; };
 		21625DFCCFF07A4F2F30F0F7 /* CertificateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED58BD2D0321818E25DCE36F /* CertificateInfo.swift */; };
 		22462175A4C9A71326490333 /* ExportImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC435691A4E042B1E2AC167E /* ExportImportService.swift */; };
 		2459414EB855643D92EB2640 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CE9CC235ADAAF557FADB0C /* RootView.swift */; };
@@ -41,6 +42,7 @@
 		7867D0A0086CB4C1FAA9D6A1 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BB13D56DF53CC078C2FDF8 /* NotificationScheduler.swift */; };
 		78B060252052EA463E695CDC /* EndpointStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5941930D1430E64DA0DF983D /* EndpointStore.swift */; };
 		7C30E603AED906ABA7127EA9 /* AppMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3F5038285B1758B80C8B89 /* AppMetadata.swift */; };
+		7CFDD7A455A13C961B7D2988 /* NotificationRescheduleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD2EC04F261417C3C62D1EB /* NotificationRescheduleService.swift */; };
 		7E4662CC1F65DD9BDA85CF77 /* WidgetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F7FB5E12CBDFC85AB6BE24 /* WidgetProvider.swift */; };
 		7ED9C9C4B6360FD381A55F75 /* CertificatePEMParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC637E6A3BF56B571644E7 /* CertificatePEMParser.swift */; };
 		845010E06921EB1F5001287E /* AppSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297EACFCBEC2C6CDEE93F34C /* AppSettingsTests.swift */; };
@@ -116,10 +118,11 @@
 /* Begin PBXFileReference section */
 		01D96D31F20F1FFFBB3AACAB /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		07D02CCF54467178AF246BA1 /* CertificateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateService.swift; sourceTree = "<group>"; };
-		0D27E5C9AA656BB62DD0AC90 /* CertWatchWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = CertWatchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0AD2EC04F261417C3C62D1EB /* NotificationRescheduleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRescheduleService.swift; sourceTree = "<group>"; };
+		0D27E5C9AA656BB62DD0AC90 /* CertWatchWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CertWatchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EE055740C6FD2A74D7C45F6 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		0F9FF8A3D548DEBBFA415A93 /* MonitoredEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitoredEndpointTests.swift; sourceTree = "<group>"; };
-		148BF2CC2A2EB195F0EAA951 /* CertWatchTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = CertWatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		148BF2CC2A2EB195F0EAA951 /* CertWatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CertWatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		16DE1A7E6B6D2D5EF92828DD /* Product+DisplayPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+DisplayPrice.swift"; sourceTree = "<group>"; };
 		19CE9CC235ADAAF557FADB0C /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		1C77F147128453B0D70FFCE3 /* X509DERParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X509DERParserTests.swift; sourceTree = "<group>"; };
@@ -352,6 +355,7 @@
 				5941930D1430E64DA0DF983D /* EndpointStore.swift */,
 				EC435691A4E042B1E2AC167E /* ExportImportService.swift */,
 				C9F0D7078DA035245A69BDCC /* ModelContainerFactory.swift */,
+				0AD2EC04F261417C3C62D1EB /* NotificationRescheduleService.swift */,
 				78BB13D56DF53CC078C2FDF8 /* NotificationScheduler.swift */,
 				16DE1A7E6B6D2D5EF92828DD /* Product+DisplayPrice.swift */,
 				A8F98FB12A1FBC5D87C69CCB /* StoreKitManager.swift */,
@@ -387,6 +391,7 @@
 				21F63ACF56BD881530441696 /* Sources */,
 				3D046F465F8195E3459B1419 /* Resources */,
 				0EA60CE1D54AFA72D3B092F6 /* Embed Foundation Extensions */,
+				3D2CDE07C0EA81EA8DFCAC6F /* Strip embedded test frameworks */,
 			);
 			buildRules = (
 			);
@@ -424,7 +429,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					0541F2088BC40ECDEE0A9CC6 = {
 						DevelopmentTeam = 5LVS6ZWDJW;
@@ -469,6 +474,28 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3D2CDE07C0EA81EA8DFCAC6F /* Strip embedded test frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Strip embedded test frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "FRAMEWORKS_DIR=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Frameworks\"\nif [ -d \"$FRAMEWORKS_DIR\" ]; then\n  find \"$FRAMEWORKS_DIR\" -maxdepth 1 \\( \\\n    -name 'Testing.framework' -o \\\n    -name 'XCTAutomationSupport.framework' -o \\\n    -name 'XCTest.framework' -o \\\n    -name 'XCTestCore.framework' -o \\\n    -name 'XCTestSupport.framework' -o \\\n    -name 'XCUIAutomation.framework' -o \\\n    -name 'XCUnit.framework' -o \\\n    -name 'libXCTestBundleInject.dylib' -o \\\n    -name 'libXCTestSwiftSupport.dylib' \\\n  \\) -exec rm -rf {} +\n  rmdir \"$FRAMEWORKS_DIR\" 2>/dev/null || true\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		21F63ACF56BD881530441696 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -497,6 +524,7 @@
 				5854434EF07DBEDD89674FEC /* ModelContainerFactory.swift in Sources */,
 				1566683C64C0E6C8A786AD88 /* MonitoredEndpoint+Display.swift in Sources */,
 				470D8EC3C321A489CCC85EF5 /* MonitoredEndpoint.swift in Sources */,
+				1DF80F4E73E4E4D8FE7DD964 /* NotificationRescheduleService.swift in Sources */,
 				3B58BDC35DBA2A757AB64693 /* NotificationScheduler.swift in Sources */,
 				C3B1DF81B34B7F3A5CE50523 /* OnboardingView.swift in Sources */,
 				E08926DD9E481961944E06DC /* PaywallView.swift in Sources */,
@@ -553,6 +581,7 @@
 				60BDE86B518E39EA6112BAA2 /* HostnameParser.swift in Sources */,
 				9104F278BC25ABA3C94D8124 /* ModelContainerFactory.swift in Sources */,
 				FABAD6B2FF86B488AE2D1AE2 /* MonitoredEndpoint.swift in Sources */,
+				7CFDD7A455A13C961B7D2988 /* NotificationRescheduleService.swift in Sources */,
 				7867D0A0086CB4C1FAA9D6A1 /* NotificationScheduler.swift in Sources */,
 				BF6F6C699B39F633B8C7DF28 /* Product+DisplayPrice.swift in Sources */,
 				FCD911ED8D05463B0C2D60C8 /* TagChipViews.swift in Sources */,
@@ -616,6 +645,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -646,11 +676,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5LVS6ZWDJW;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -660,11 +691,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 6.0;
@@ -678,7 +710,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = CertWatch.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = CertWatch;
@@ -690,7 +721,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mfrankland.certwatch;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -720,7 +750,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = CertWatch.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = CertWatch;
@@ -732,7 +761,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mfrankland.certwatch;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -760,6 +788,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -790,11 +819,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 5LVS6ZWDJW;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -810,12 +840,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;

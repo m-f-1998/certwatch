@@ -211,6 +211,7 @@ private final class StoreHolder: ObservableObject {
     }
 
     func syncNotifications() async {
+        _ = await NotificationRescheduleService.rescheduleIfAuthorizationGranted()
         await store?.syncNotificationsWithEndpoints()
     }
 
