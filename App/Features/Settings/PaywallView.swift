@@ -28,7 +28,9 @@ struct PaywallView: View {
                     }
 
                     if let error = storeKitManager.purchaseError {
-                        purchaseErrorBanner(error)
+                        feedbackBanner(error, style: .error)
+                    } else if let info = storeKitManager.purchaseInfo {
+                        feedbackBanner(info, style: .info)
                     }
 
                     Button {
@@ -49,17 +51,26 @@ struct PaywallView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(CertWatchTheme.healthy)
-                    .disabled(storeKitManager.isPurchasing)
+                    .disabled(storeKitManager.isPurchasing || storeKitManager.isRestoring)
 
-                    Button("Restore Purchases") {
+                    Button {
                         Task {
                             await storeKitManager.restorePurchases()
                             if AppSettings.isProUnlocked {
                                 dismiss()
                             }
                         }
+                    } label: {
+                        Group {
+                            if storeKitManager.isRestoring {
+                                Text("Restoring…")
+                            } else {
+                                Text("Restore Purchases")
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
+                    .disabled(storeKitManager.isPurchasing || storeKitManager.isRestoring)
                 }
                 .padding()
             }
@@ -81,18 +92,37 @@ struct PaywallView: View {
         .presentationDragIndicator(.visible)
     }
 
-    private func purchaseErrorBanner(_ message: String) -> some View {
+    private enum FeedbackStyle {
+        case error
+        case info
+
+        var symbol: String {
+            switch self {
+            case .error: "exclamationmark.triangle.fill"
+            case .info: "info.circle.fill"
+            }
+        }
+
+        var color: Color {
+            switch self {
+            case .error: CertWatchTheme.critical
+            case .info: CertWatchTheme.secondaryText
+            }
+        }
+    }
+
+    private func feedbackBanner(_ message: String, style: FeedbackStyle) -> some View {
         HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "exclamationmark.triangle.fill")
+            Image(systemName: style.symbol)
                 .imageScale(.medium)
             Text(message)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .font(.footnote)
-        .foregroundStyle(CertWatchTheme.critical)
+        .foregroundStyle(style.color)
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(CertWatchTheme.critical.opacity(0.12))
+        .background(style.color.opacity(0.12))
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 
