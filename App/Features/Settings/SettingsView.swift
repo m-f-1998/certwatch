@@ -29,11 +29,17 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                if !AppSettings.isProUnlocked {
+                if AppSettings.isProUnlocked {
+                    Section {
+                        LabeledContent("CertWatch Pro", value: "Active")
+                    }
+                } else {
                     Section {
                         Button("Unlock CertWatch Pro") {
                             showingPaywall = true
                         }
+                    } footer: {
+                        Text("Unlimited endpoints, widgets, custom alerts, and export.")
                     }
                 }
 

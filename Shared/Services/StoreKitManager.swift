@@ -6,6 +6,7 @@ final class StoreKitManager: ObservableObject {
     @Published private(set) var product: Product?
     @Published private(set) var isPurchasing = false
     @Published private(set) var purchaseError: String?
+    @Published private(set) var storefrontCountryCode: String?
 
     private nonisolated(unsafe) var updatesTask: Task<Void, Never>?
 
@@ -20,9 +21,13 @@ final class StoreKitManager: ObservableObject {
     }
 
     func loadProducts() async {
+        await finishUnfinishedTransactions()
+        let countryCode = await Storefront.current?.countryCode
         do {
             let products = try await Product.products(for: [AppSettings.proProductID])
+            storefrontCountryCode = countryCode
             product = products.first
+            purchaseError = nil
         } catch {
             purchaseError = error.localizedDescription
         }
@@ -33,6 +38,9 @@ final class StoreKitManager: ObservableObject {
         isPurchasing = true
         purchaseError = nil
         defer { isPurchasing = false }
+
+        await finishUnfinishedTransactions()
+        if AppSettings.isProUnlocked { return true }
 
         do {
             let result = try await product.purchase()
@@ -67,6 +75,10 @@ final class StoreKitManager: ObservableObject {
     }
 
     func restorePurchases() async {
+        purchaseError = nil
+        await finishUnfinishedTransactions()
+        if AppSettings.isProUnlocked { return }
+
         do {
             try await AppStore.sync()
             await refreshEntitlements()
@@ -87,15 +99,35 @@ final class StoreKitManager: ObservableObject {
         }
     }
 
+    private func finishUnfinishedTransactions() async {
+        for await result in Transaction.unfinished {
+            switch result {
+            case .verified(let transaction):
+                if transaction.productID == AppSettings.proProductID {
+                    AppSettings.unlockPro()
+                    await NotificationRescheduleService.rescheduleAll()
+                    BackgroundRefreshService.scheduleNextRefresh()
+                }
+                await transaction.finish()
+            case .unverified(let transaction, _):
+                await transaction.finish()
+            }
+        }
+    }
+
     private func observeTransactions() async {
         for await result in Transaction.updates {
-            guard let transaction = try? checkVerified(result) else { continue }
-            if transaction.productID == AppSettings.proProductID {
-                AppSettings.unlockPro()
-                await NotificationRescheduleService.rescheduleAll()
-                BackgroundRefreshService.scheduleNextRefresh()
+            switch result {
+            case .verified(let transaction):
+                if transaction.productID == AppSettings.proProductID {
+                    AppSettings.unlockPro()
+                    await NotificationRescheduleService.rescheduleAll()
+                    BackgroundRefreshService.scheduleNextRefresh()
+                }
+                await transaction.finish()
+            case .unverified(let transaction, _):
+                await transaction.finish()
             }
-            await transaction.finish()
         }
     }
 

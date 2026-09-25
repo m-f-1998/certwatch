@@ -36,8 +36,6 @@ struct CertWatchApp: App {
                 } else {
                     RootView()
                         .task {
-                            await storeKitManager.loadProducts()
-                            await storeKitManager.refreshEntitlements()
                             BackgroundRefreshService.scheduleNextRefresh()
                             await NotificationRescheduleService.syncWithStoredAuthorization()
                         }

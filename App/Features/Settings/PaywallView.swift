@@ -22,9 +22,13 @@ struct PaywallView: View {
                     featureRow("tag", "Tags, notes, and export/import")
 
                     if let product = storeKitManager.product {
-                        Text("One-time purchase · \(product.localizedDisplayPrice)")
+                        Text("One-time purchase · \(product.localizedDisplayPrice(storefrontCountryCode: storeKitManager.storefrontCountryCode))")
                             .font(.title3.bold())
                             .padding(.top, 8)
+                    }
+
+                    if let error = storeKitManager.purchaseError {
+                        purchaseErrorBanner(error)
                     }
 
                     Button {
@@ -48,18 +52,18 @@ struct PaywallView: View {
                     .disabled(storeKitManager.isPurchasing)
 
                     Button("Restore Purchases") {
-                        Task { await storeKitManager.restorePurchases() }
+                        Task {
+                            await storeKitManager.restorePurchases()
+                            if AppSettings.isProUnlocked {
+                                dismiss()
+                            }
+                        }
                     }
                     .frame(maxWidth: .infinity)
-
-                    if let error = storeKitManager.purchaseError {
-                        Text(error)
-                            .font(.footnote)
-                            .foregroundStyle(CertWatchTheme.critical)
-                    }
                 }
                 .padding()
             }
+            .safeAreaPadding(.bottom)
             .background(CertWatchTheme.canvas)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -68,8 +72,28 @@ struct PaywallView: View {
             }
             .task {
                 await storeKitManager.loadProducts()
+                if AppSettings.isProUnlocked {
+                    dismiss()
+                }
             }
         }
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
+    }
+
+    private func purchaseErrorBanner(_ message: String) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .imageScale(.medium)
+            Text(message)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .font(.footnote)
+        .foregroundStyle(CertWatchTheme.critical)
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(CertWatchTheme.critical.opacity(0.12))
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 
     private func featureRow(_ symbol: String, _ text: String) -> some View {
